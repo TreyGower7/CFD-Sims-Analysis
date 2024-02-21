@@ -15,7 +15,7 @@ def get_data():
      Returns: 
     
     """
-    url = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/pt1/20/line1_U.xy"
+    url = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/pt2/RE10/line1_U.xy"
     response = requests.get(url)
     #data = []
     if response.status_code == 200:
@@ -24,9 +24,15 @@ def get_data():
             print(line)  # Example: Print each line
     else:
         print("Failed to retrieve content. Status code:", response.status_code)
+    u = np.zeros([len(data),1])
+    v = np.zeros([len(data),1])
+    for i in range(len(data)-1):
+        u[i] = float((data[i].split())[3])
+        v[i] = float((data[i].split())[4])
 
-    print(data)
-
+    #Weird but okay getting rid of random zero
+    u = u[:-1]
+    v = v[:-1]
 def main():
     """ Main entry point of the app """
     data = get_data()

@@ -22,7 +22,7 @@ def get_data():
     vvec = []
     xvec = []
     yvec = []
-    for k in range(3):
+    for k in range(4):
         url = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/pt1/" + str(ind) + "/line1_U.xy"
         response = requests.get(url)
         data = []
@@ -56,11 +56,12 @@ def get_data():
 def plot(u,v,y):
     """Plotting for u vs v with x=.5
     """
-    cmap = get_cmap('viridis')
+    cmap = get_cmap('gist_rainbow')
+    print(len(u))
     for i in range(4):
         color = cmap(i / 4)
-        plt.plot(y[i], u[i], label=('u'  + str(i) + ' vel'),color=color)
-        plt.plot(y[i], v[i], label=('v'  + str(i) + ' vel'), color=color)
+        plt.plot(y[i], u[i], label=('u'  + str(i+1) + ' vel'),color=color)
+        plt.plot(y[i], v[i], label=('v'  + str(i+1) + ' vel'), color=color)
     
     plt.legend(loc='upper left')  # Specify loc directly as a keyword argument
     plt.title('velocity vs y, RE=10')
@@ -68,9 +69,11 @@ def plot(u,v,y):
     plt.ylabel('Velocity')
     plt.grid()
     plt.show()
-
-    plt.plot(y,v, '-r')
-    plt.title('v vs y, grid size 20, RE=10')
+    for i in range(4):
+        color = cmap(i / 4)
+        plt.plot(y[i],v[i], '-r',label=('v'  + str(i+1) + ' vel'),color=color)
+    plt.legend(loc='upper left')  # Specify loc directly as a keyword argument
+    plt.title('v vs y, RE=10')
     plt.xlabel('y')
     plt.ylabel('v')
     plt.grid()
@@ -80,7 +83,6 @@ def plot(u,v,y):
 def main():
     """ Main entry point of the app """
     u,v,x,y = get_data()
-    
     plot(u,v,y)
 
 if __name__ == "__main__":

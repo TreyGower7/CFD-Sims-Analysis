@@ -9,7 +9,7 @@ plotting u vs v for x =.5 and y = [0:1]
 
 __author__ = "Trey Gower, David Valenzano, Ty Zimmerman"
 
-def get_data():
+def get_data(urls):
     """ Get Data from Github
      
      Args:
@@ -17,16 +17,10 @@ def get_data():
      Returns: 
     
     """
-    Re=10;
     uvec = []
     vvec = []
     xvec = []
     yvec = []
-
-    url_l1 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/short/RE" + str(Re) + "/line1_U.xy"
-    url_l2 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/short/RE" + str(Re) + "/line2_U.xy"
-    url_l3 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/short/RE" + str(Re) + "/line3_U.xy"
-    urls = [url_l1,url_l2,url_l3]
     data = []
 
     for i in range(3):
@@ -71,14 +65,41 @@ def evaluate_F(u):
 
     u_prime = u_prime
     F = sum(u_prime)
-    return F
+    return F, u_prime
+
+def plot(tao,x):
+    """Plotting for u vs v with x=.5
+    """
+    cmap = get_cmap('gist_rainbow')
+    for i in range(3):
+        color = cmap(i / 3)
+        plt.plot(x[i][i], tao[i], label=('tao'  + str(i+1)),color=color)
+    
+    plt.legend(loc='upper left')  # Specify loc directly as a keyword argument
+    plt.title('tao vs x')
+    plt.xlabel('x')
+    plt.ylabel('tao')
+    plt.legend()
+    plt.grid()
+    plt.show()
 
 def main():
     """ Main entry point of the app """
-    u,v,x = get_data()
-    F = evaluate_F(u)
-    print(F)
-    #plot_F_RE(u,v,y)
+    Re = [10,100,250,500]
+    F = np.zeros([4,1])
+    tao = []
+    x = []
+    for i in range(4):
+        url_l1 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/short/RE" + str(Re[i]) + "/line1_U.xy"
+        url_l2 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/short/RE" + str(Re[i]) + "/line2_U.xy"
+        url_l3 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/short/RE" + str(Re[i]) + "/line3_U.xy"
+        urls = [url_l1,url_l2,url_l3]
+        u,v,xtemp = get_data(urls)
+        x.append(xtemp)
+        Ftemp, taotemp = evaluate_F(u)
+        F[i] = Ftemp
+        tao.append(taotemp)
+    plot(tao, x)
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """

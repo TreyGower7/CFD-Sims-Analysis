@@ -23,9 +23,9 @@ def get_data():
     xvec = []
     yvec = []
 
-    url_l1 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/pt2/RE" + str(Re) + "/line1_U.xy"
-    url_l2 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/pt2/RE" + str(Re) + "/line2_U.xy"
-    url_l3 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/pt2/RE" + str(Re) + "/line3_U.xy"
+    url_l1 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/short/RE" + str(Re) + "/line1_U.xy"
+    url_l2 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/short/RE" + str(Re) + "/line2_U.xy"
+    url_l3 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/short/RE" + str(Re) + "/line3_U.xy"
     urls = [url_l1,url_l2,url_l3]
     data = []
 

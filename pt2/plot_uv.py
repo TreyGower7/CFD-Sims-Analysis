@@ -17,73 +17,71 @@ def get_data():
      Returns: 
     
     """
-    ind=20;
-    uvec = []
-    vvec = []
-    xvec = []
-    yvec = []
+    ind=[10,100,250,500];
+    uvec = [[]]
+    vvec = [[]]
+    xvec = [[]]
+    yvec = [[]]
     for k in range(4):
-        url = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/pt1/" + str(ind) + "/line1_U.xy"
-        response = requests.get(url)
-        data = []
-        if response.status_code == 200:
-            data = response.text.split('\n')  # Split the response into lines
-        else:
-            print("Failed to retrieve content. Status code:", response.status_code)
-        u = np.zeros([len(data),1])
-        v = np.zeros([len(data),1])
-        x = np.zeros([len(data),1])
-        y = np.zeros([len(data),1])
-        for i in range(len(data)-1):
-            u[i] = float((data[i].split())[3])
-            v[i] = float((data[i].split())[4])
-            x[i] = float((data[i].split())[0])
-            y[i] = float((data[i].split())[1])
-        #Weird but okay getting rid of random zero
-        u = u[:-1]
-        v = v[:-1]
-        x = x[:-1]
-        y = y[:-1]
-        uvec.append(u)
-        vvec.append(v)
-        xvec.append(x)
-        yvec.append(y)
 
-        ind *= 2
+        url_l1 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/pt2/RE" + str(ind[k]) + "/line1_U.xy"
+        url_l2 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/pt2/RE" + str(ind[k]) + "/line2_U.xy"
+        url_l3 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/pt2/RE" + str(ind[k]) + "/line3_U.xy"
+        url_l4 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/pt2/RE" + str(ind[k]) + "/line4_U.xy"
+        urls = [url_l1,url_l2,url_l3,url_l4]
+        data = []
+        data_RE = []
+
+        for i in range(4):
+            response = requests.get(urls[i])
+
+            if response.status_code == 200:
+                for i in range(4):
+                    # Split the response into lines
+                    data.append(response.text.split('\n')) 
+            else:
+                print("Failed to retrieve content. Status code:", response.status_code)
+       #u = np.zeros([len(data),1])
+        #v = np.zeros([len(data),1])
+        #x = np.zeros([len(data),1])
+        #y = np.zeros([len(data),1])
+        #for i in range(len(data)-1):
+        #    u[i] = float((data[i].split())[3])
+        #    v[i] = float((data[i].split())[4])
+        #    x[i] = float((data[i].split())[0])
+        #    y[i] = float((data[i].split())[1])
+        #Weird but okay getting rid of random zero
+        #u = u[:-1]
+        #v = v[:-1]
+        #x = x[:-1]
+        #y = y[:-1]
+        #uvec.append(u)
+        #vvec.append(v)
+        #xvec.append(x)
+        #yvec.append(y)
+        #clear urls and data for next iteration
+        del urls
+        data_RE.append(data)
+        del data
         #Weird but okay getting rid of random zero
     #index to next grid size
-    return uvec,vvec,xvec,yvec
-def plot(u,v,y):
-    """Plotting for u vs v with x=.5
-    """
-    cmap = get_cmap('gist_rainbow')
-    print(len(u))
-    for i in range(4):
-        color = cmap(i / 4)
-        plt.plot(y[i], u[i], label=('u'  + str(i+1) + ' vel'),color=color)
-        plt.plot(y[i], v[i], label=('v'  + str(i+1) + ' vel'), color=color)
-    
-    plt.legend(loc='upper left')  # Specify loc directly as a keyword argument
-    plt.title('velocity vs y, RE=10')
-    plt.xlabel('y')
-    plt.ylabel('Velocity')
-    plt.grid()
-    plt.show()
-    for i in range(4):
-        color = cmap(i / 4)
-        plt.plot(y[i],v[i], '-r',label=('v'  + str(i+1) + ' vel'),color=color)
-    plt.legend(loc='upper left')  # Specify loc directly as a keyword argument
-    plt.title('v vs y, RE=10')
-    plt.xlabel('y')
-    plt.ylabel('v')
-    plt.grid()
-    plt.show()
+    print(data_RE[1])
+    #return uvec,vvec,xvec,yvec
 
+def evaluate_F():
+    """
+    Evaluates the one sided finite difference to approximate partial(u)/partial(y)
+    """
+def plot_F_RE(u,v,y):
+    """
+    Plotting for F vs RE
+    """
 
 def main():
     """ Main entry point of the app """
-    u,v,x,y = get_data()
-    plot(u,v,y)
+    get_data()
+    #u,v,x,y = get_data()
+    #plot_F_RE(u,v,y)
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """

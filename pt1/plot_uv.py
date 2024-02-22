@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import requests 
+from matplotlib.cm import get_cmap
+
 """
 plotting u vs v for x =.5 and y = [0:1]
 """
@@ -54,10 +56,14 @@ def get_data():
 def plot(u,v,y):
     """Plotting for u vs v with x=.5
     """
-    plt.plot(y, u, '-b', label='u vel')
-    plt.plot(y, v, '-r', label='v vel')
+    cmap = get_cmap('viridis')
+    for i in range(4):
+        color = cmap(i / 4)
+        plt.plot(y[i], u[i], label=('u'  + str(i) + ' vel'),color=color)
+        plt.plot(y[i], v[i], label=('v'  + str(i) + ' vel'), color=color)
+    
     plt.legend(loc='upper left')  # Specify loc directly as a keyword argument
-    plt.title('velocity vs y, grid size 20, RE=10')
+    plt.title('velocity vs y, RE=10')
     plt.xlabel('y')
     plt.ylabel('Velocity')
     plt.grid()
@@ -75,8 +81,7 @@ def main():
     """ Main entry point of the app """
     u,v,x,y = get_data()
     
-    print(u[2])
-    #plot(u,v,y)
+    plot(u,v,y)
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """

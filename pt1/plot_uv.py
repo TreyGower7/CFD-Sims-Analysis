@@ -64,7 +64,7 @@ def plot(u,v,y):
         plt.plot(y[i], v[i], label=('v'  + str(i+1) + ' vel'), color=color)
     
     plt.legend(loc='upper left')  # Specify loc directly as a keyword argument
-    plt.title('velocity vs y, RE=10')
+    plt.title('velocity vs y refined, RE=10')
     plt.xlabel('y')
     plt.ylabel('Velocity')
     plt.grid()
@@ -73,7 +73,7 @@ def plot(u,v,y):
         color = cmap(i / 4)
         plt.plot(y[i],v[i], '-r',label=('v'  + str(i+1) + ' vel'),color=color)
     plt.legend(loc='upper left')  # Specify loc directly as a keyword argument
-    plt.title('v vs y, RE=10')
+    plt.title('v vs y refined, RE=10')
     plt.xlabel('y')
     plt.ylabel('v')
     plt.grid()

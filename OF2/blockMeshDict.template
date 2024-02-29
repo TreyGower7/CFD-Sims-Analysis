@@ -1,0 +1,101 @@
+FoamFile
+{
+    version  2.0;
+    format   ascii;
+    class    dictionary;
+    object   blockMeshDict;
+}
+
+convertToMeters 1.0;
+
+vertices
+(
+   // put vertices here
+   // this is sample entry
+
+   // ( 1.0000000000000000e+01 -7.0710678118654746e-01  5.0000000000000003e-02) // 63
+
+);
+
+blocks
+(
+
+   // put blocks here
+   // this is a sample entry
+
+   // block 0
+   // hex (0 8 9 1 32 40 41 33) (10 20 1) simpleGrading ( 2.00000e+00  1.00000e+00 1.0)
+
+);
+
+edges
+(
+
+ // put special edges, such as arcs, here
+
+ // this is a sample entry
+ // arc 0 1 ( 4.61940e-01  1.91342e-01 -5.00000e-02)
+
+);
+
+boundary
+(
+
+  inlet
+  {
+      type patch;
+      faces
+      (
+
+      // put faces here
+      // this is a sample entry
+      // (18 50 49 17)
+ 
+      );
+  }
+
+  outlet
+  {
+      type patch;
+      faces
+      (
+
+      // put faces here
+
+      );
+  }
+
+  cylinder
+  {
+      type wall;
+      faces
+      (
+
+      // put faces here
+
+      );
+  }
+
+  top
+  {
+      type symmetryPlane;
+      faces
+      (
+
+      // put faces here
+
+      );
+  }
+
+  bottom
+  {
+      type symmetryPlane;
+      faces
+      (
+
+      // put faces here
+
+      );
+  }
+
+);

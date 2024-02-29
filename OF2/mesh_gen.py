@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 """
 Mesh generation script for cylinder 
 """
@@ -19,7 +20,6 @@ def params():
     H = int(input('Enter H: ')) 
 
     arcs = n/2
-    n = n-1 #Adjusting to start indexing at 0
     #blocks = generate_blocks(n)
     return n, Lf, Lw, R, H, arcs
 
@@ -48,19 +48,35 @@ def generate_blocks(n):
                 blocks.append(block)
     return blocks
 
-def generate_vertices(n,R):
-    vertices = [(0,.5,-.5)]
-    radius = 1
-    angle_increment = 2 * np.pi / n
-    starting_angle = np.arcsin(0.5)  # Calculate the starting angle for y = 0.5
-    z = -0.05  # Constant value for z-coordinate
-    for i in range(n):
-        if i == n // 2:
-            z = 0.05
-        angle = starting_angle + i * angle_increment
-        x = radius * np.cos(angle)
-        y = radius * np.sin(angle)
-        vertices.append((x, y, z))
+def generate_vertices(n,R,H,Lw,Lf):
+    #South pole included
+    vertices = []
+    #[0, 0.5, -0.5]
+
+    # Generate vertices around the circumference of inner cylinder
+    #We want 8 vertices around each block so n//8
+    # Calculate angle increment
+    angle_increment = 2 * np.pi / (n//8)
+
+    # Generate vertices around the circumference
+    for i in range(n//8):
+        angle = i * angle_increment
+        x = (R/2) * np.cos(angle)
+        y = (R/2) * np.sin(angle)
+        z = -0.5 
+        vertices.append([x, y, z])
+
+    # Generate vertices around the circumference of outer
+    for i in range(n//8):
+        angle = i * angle_increment
+        x = (R) * np.cos(angle)
+        y = (R) * np.sin(angle)
+        z = -0.5 
+        vertices.append([x, y, z])
+
+    # Add north pole vertex
+    vertices.append([0, 0.5, -0.5 + H])
+
     return vertices
     
 
@@ -100,7 +116,8 @@ def mesh_file(vertices, blocks, edges):
 def main():
     """ Main entry point """
 n, Lf, Lw, R, H, arcs = params()
-vertices = generate_vertices(n,R)
+vertices = generate_vertices(n,R,H,Lw,Lf)
+print(len(vertices))
 print(vertices)
 
 if __name__ == "__main__":

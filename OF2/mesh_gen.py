@@ -13,10 +13,15 @@ def params():
     n_pole = np.array((0,.5)) #North pole
 
     n = int(input('Enter number of vertices: ')) #enter number of vertices
+    Lf = int(input('Enter Lf: ')) #enter number of vertices
+    Lw = int(input('Enter Lw: ')) 
+    R = int(input('Enter R: ')) 
+    H = int(input('Enter H: ')) 
+
     arcs = n/2
     n = n-1 #Adjusting to start indexing at 0
-    blocks = generate_blocks(n)
-    return n, blocks, arcs
+    #blocks = generate_blocks(n)
+    return n, Lf, Lw, R, H, arcs
 
 def generate_blocks(n):
     """
@@ -42,6 +47,22 @@ def generate_blocks(n):
                 block = f'hex ({v0} {v1} {v3} {v2} {v4} {v5} {v7} {v6}) (1 1 1)'
                 blocks.append(block)
     return blocks
+
+def generate_vertices(n,R):
+    vertices = [(0,.5,-.5)]
+    radius = 1
+    angle_increment = 2 * np.pi / n
+    starting_angle = np.arcsin(0.5)  # Calculate the starting angle for y = 0.5
+    z = -0.05  # Constant value for z-coordinate
+    for i in range(n):
+        if i == n // 2:
+            z = 0.05
+        angle = starting_angle + i * angle_increment
+        x = radius * np.cos(angle)
+        y = radius * np.sin(angle)
+        vertices.append((x, y, z))
+    return vertices
+    
 
 def mesh_file(vertices, blocks, edges):
     """ 
@@ -78,10 +99,9 @@ def mesh_file(vertices, blocks, edges):
     
 def main():
     """ Main entry point """
-n, blocks, arcs = params()
-print(str(len(blocks)) + '\n')
-print(blocks)
-
+n, Lf, Lw, R, H, arcs = params()
+vertices = generate_vertices(n,R)
+print(vertices)
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """

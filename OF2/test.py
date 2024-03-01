@@ -1,31 +1,40 @@
-import math
+import numpy as np
+R = 1
+r = 1
+H = 3
+Lf = 3
+Lw = 3
+n= 64
 
-def generate_cylinder_vertices(radius, height, num_segments):
-    vertices = []
+vertices = np.zeros((n,3))
+angle_increment = 2 * np.pi / (n//8)
 
-    # Add south pole vertex
-    vertices.append([0, 0.5, -0.5])
+for i in range((n//4)-1):
+    angle = i * angle_increment
+    if i <= 8:
+        for j in range(3):
+            if j == 0:
+                vertices[i, j] = r* np.cos(angle)
+            if j == 1:
+                vertices[i, j] = r* np.sin(angle)
+            else:
+                vertices[i, j] = -.5
+    else:
+        for j in range(3):
+            if j == 0:
+                vertices[i, j] = (r+R)* np.cos(angle)
+            if j == 1:
+                vertices[i, j] = (r+R)* np.sin(angle)
+            else:
+                vertices[i, j] = -.5
 
-    # Calculate angle increment
-    angle_increment = 2 * math.pi / (num_segments//8)
+for i in range(31,(n//4)-1, -1):
+    for j in range(3):
+        vertices[i, j] = (r+R+Lw) + vertices[i, j]
+        if j == 1:
+            vertices[i, j] = vertices[i, j]
+        else:
+            vertices[i, j] = -.5
+    
 
-    # Generate vertices around the circumference
-    for i in range(num_segments//8):
-        angle = i * angle_increment
-        x = (radius/2) * math.cos(angle)
-        y = (radius/2) * math.sin(angle)
-        z = -0.5 
-        vertices.append([x, y, z])
-
-    # Add north pole vertex
-    vertices.append([0, 0.5, -0.5 + height])
-
-    return vertices
-
-radius = 1
-height = 1.0
-num_segments = 64
-cylinder_vertices = generate_cylinder_vertices(radius, height, num_segments)
-print("Cylinder Vertices:")
-for vertex in cylinder_vertices:
-    print(vertex)
+print(vertices)

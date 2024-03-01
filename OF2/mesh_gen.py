@@ -12,10 +12,11 @@ def params():
     """
 
     n = int(input('Enter number of vertices: ')) #enter number of vertices
-    Lf = int(input('Enter Lf: ')) #enter number of vertices
-    Lw = int(input('Enter Lw: ')) 
     R = int(input('Enter R: ')) 
     H = int(input('Enter H: ')) 
+    Lw = int(input('Enter Lw: ')) 
+    Lf= int(input('Enter Lf: ')) 
+
 
     arcs = n/2
     #blocks = generate_blocks(n)
@@ -46,65 +47,56 @@ def generate_blocks(n):
                 blocks.append(block)
     return blocks
 
-def generate_vertices(n,R,H,Lw,Lf):
-    vertices = {}
+def generate_vertices(n,R,H,Lf,Lw):
     s_pole = [0, 0.5, -0.5] #North pole
     n_pole = [0, 0.5, 0.5] #North pole
     
-
+    D = R*2
     # Generate vertices around the circumference of inner cylinder
     #We want 8 vertices around each block so n//8
     # Calculate angle increment
+    vertices = np.zeros((n,3))
     angle_increment = 2 * np.pi / (n//8)
 
-    # Generate vertices around the circumference of inner
-    for i in range(n//8):
+    for i in range((n//4)-1):
         angle = i * angle_increment
-        x = (R/2) * np.cos(angle)
-        y = (R/2) * np.sin(angle)
-        z = -0.5 
-        vertices[i] = '(' + str(x) + ' ' + str(y) + ' ' +str(z) + ')'
-
-    # Generate vertices around the circumference of outer
-    for i in range(n//8):
-        angle = i * angle_increment
-        x = (R) * np.cos(angle)
-        y = (R) * np.sin(angle)
-        z = -0.5 
-        vertices[i+(n//8)] = '(' + str(x) + ' ' + str(y) + ' ' +str(z) + ')'
-        #vertices.append(str((x, y, z)) + ' // ' + str(i*n))
-    # Generate vertices for the grid
+        if i <= 8:
+            for j in range(3):
+                if j == 0:
+                    vertices[i, j] = R* np.cos(angle)
+                if j == 1:
+                    vertices[i, j] = R* np.sin(angle)
+                else:
+                    vertices[i, j] = -.5
+        else:
+            for j in range(3):
+                if j == 0:
+                    vertices[i, j] = (D+R)* np.cos(angle)
+                if j == 1:
+                    vertices[i, j] = (D+R)* np.sin(angle)
+                else:
+                    vertices[i, j] = -.5
     '''
-    for i in range(n//8):
-        x = 
-        y = 
-        z = -0.5 
-        vertices.append((x, y, z))
+    for i in range(31,(n//4)-1, -1):
+        for j in range(3):
+            vertices[i, j] = (r+R+Lw) + vertices[i, j]
+            if j == 1:
+                vertices[i, j] = vertices[i, j]
+            else:
+                vertices[i, j] = -.5
     '''
-    # Add north pole vertex
-    #vertices.append([0, 0.5, -0.5 + H])
-
     return vertices
-    
+        
 
 def mesh_file(vertices, blocks, edges):
     """ 
     saves the mesh in an openfoam readable format based on the example given
     """
     #Modifing a specific template and saving as a new output
-    my_ordered_dict = OrderedDict()
-    my_ordered_dict['vert_template'] = '// ( 1.0000000000000000e+01 -7.0710678118654746e-01  5.0000000000000003e-02) // 63'
-    my_ordered_dict.update(vertices)
     contents_to_modify = {'vert_template': '// ( 1.0000000000000000e+01 -7.0710678118654746e-01  5.0000000000000003e-02) // 63',
                           'block_template': '// hex (0 8 9 1 32 40 41 33) (10 20 1) simpleGrading ( 2.00000e+00  1.00000e+00 1.0)',
                           'edge_template': '// arc 0 1 ( 4.61940e-01  1.91342e-01 -5.00000e-02)'}
-    '''
-    Template for vertices, blocks, and edges
-    new_values = {'( 5.0000000000000000e-01  0.0000000000000000e+00 -5.0000000000000003e-02) // 0',
-                   '( 3.5355339059327379e-01  3.5355339059327373e-01 -5.0000000000000003e-02) // 1',
-                   '( 3.0616169978683830e-17  5.0000000000000000e-01 -5.0000000000000003e-02) // 2',
-                   '(-3.5355339059327373e-01  3.5355339059327379e-01 -5.0000000000000003e-02) // 3'}
-    '''
+    
     index = 0;
     str_ver = ''
     with open("/Users/treygower/Desktop/blockMeshDict.template", "r") as file:
@@ -126,10 +118,10 @@ def mesh_file(vertices, blocks, edges):
 def main():
     """ Main entry point """
 n, Lf, Lw, R, H, arcs = params()
-vertices = generate_vertices(n,R,H,Lw,Lf)
+vertices = generate_vertices(n,R,H,Lf,Lw)
 print(len(vertices))
 print(vertices)
-mesh_file(vertices, Lf,R)
+mesh_file(vertices, H, R)
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """

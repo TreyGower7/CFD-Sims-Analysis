@@ -1,5 +1,5 @@
 import numpy as np
-import pandas as pd
+from collections import OrderedDict
 """
 Mesh generation script for cylinder 
 """
@@ -10,8 +10,6 @@ def params():
     """ 
     enter paramters for cylinder
     """
-    s_pole = np.array((0,-.5)) #North pole
-    n_pole = np.array((0,.5)) #North pole
 
     n = int(input('Enter number of vertices: ')) #enter number of vertices
     Lf = int(input('Enter Lf: ')) #enter number of vertices
@@ -49,22 +47,23 @@ def generate_blocks(n):
     return blocks
 
 def generate_vertices(n,R,H,Lw,Lf):
-    #South pole included
-    vertices = []
-    #[0, 0.5, -0.5]
+    vertices = {}
+    s_pole = [0, 0.5, -0.5] #North pole
+    n_pole = [0, 0.5, 0.5] #North pole
+    
 
     # Generate vertices around the circumference of inner cylinder
     #We want 8 vertices around each block so n//8
     # Calculate angle increment
     angle_increment = 2 * np.pi / (n//8)
 
-    # Generate vertices around the circumference
+    # Generate vertices around the circumference of inner
     for i in range(n//8):
         angle = i * angle_increment
         x = (R/2) * np.cos(angle)
         y = (R/2) * np.sin(angle)
         z = -0.5 
-        vertices.append([x, y, z])
+        vertices[i] = '(' + str(x) + ' ' + str(y) + ' ' +str(z) + ')'
 
     # Generate vertices around the circumference of outer
     for i in range(n//8):
@@ -72,10 +71,18 @@ def generate_vertices(n,R,H,Lw,Lf):
         x = (R) * np.cos(angle)
         y = (R) * np.sin(angle)
         z = -0.5 
-        vertices.append([x, y, z])
-
+        vertices[i+(n//8)] = '(' + str(x) + ' ' + str(y) + ' ' +str(z) + ')'
+        #vertices.append(str((x, y, z)) + ' // ' + str(i*n))
+    # Generate vertices for the grid
+    '''
+    for i in range(n//8):
+        x = 
+        y = 
+        z = -0.5 
+        vertices.append((x, y, z))
+    '''
     # Add north pole vertex
-    vertices.append([0, 0.5, -0.5 + H])
+    #vertices.append([0, 0.5, -0.5 + H])
 
     return vertices
     
@@ -85,32 +92,35 @@ def mesh_file(vertices, blocks, edges):
     saves the mesh in an openfoam readable format based on the example given
     """
     #Modifing a specific template and saving as a new output
+    my_ordered_dict = OrderedDict()
+    my_ordered_dict['vert_template'] = '// ( 1.0000000000000000e+01 -7.0710678118654746e-01  5.0000000000000003e-02) // 63'
+    my_ordered_dict.update(vertices)
     contents_to_modify = {'vert_template': '// ( 1.0000000000000000e+01 -7.0710678118654746e-01  5.0000000000000003e-02) // 63',
                           'block_template': '// hex (0 8 9 1 32 40 41 33) (10 20 1) simpleGrading ( 2.00000e+00  1.00000e+00 1.0)',
                           'edge_template': '// arc 0 1 ( 4.61940e-01  1.91342e-01 -5.00000e-02)'}
-    
-    '''Template for vertices, blocks, and edges
-    new_values = {'0': '( 5.0000000000000000e-01  0.0000000000000000e+00 -5.0000000000000003e-02) // 0',
-                  '1': '( 3.5355339059327379e-01  3.5355339059327373e-01 -5.0000000000000003e-02) // 1',
-                  '2': '( 3.0616169978683830e-17  5.0000000000000000e-01 -5.0000000000000003e-02) // 2',
-                  '3': '(-3.5355339059327373e-01  3.5355339059327379e-01 -5.0000000000000003e-02) // 3'}
     '''
-    #Open the template
-    with open('/home1/09043/tagower/CFD_repo/OF2/blockMeshDict.template', 'r') as f:
-        content = f.read()
+    Template for vertices, blocks, and edges
+    new_values = {'( 5.0000000000000000e-01  0.0000000000000000e+00 -5.0000000000000003e-02) // 0',
+                   '( 3.5355339059327379e-01  3.5355339059327373e-01 -5.0000000000000003e-02) // 1',
+                   '( 3.0616169978683830e-17  5.0000000000000000e-01 -5.0000000000000003e-02) // 2',
+                   '(-3.5355339059327373e-01  3.5355339059327379e-01 -5.0000000000000003e-02) // 3'}
+    '''
+    index = 0;
+    str_ver = ''
+    with open("/Users/treygower/Desktop/blockMeshDict.template", "r") as file:
+        lines = file.readlines()
+    for i in range(len(vertices)):
+        str_ver = str_ver + str(vertices[i]) + f' // {i}\n'
+    # Iterate over the lines and replace the specified line
+    for i, line in enumerate(lines):
+        if contents_to_modify['vert_template'] in line:
+            lines[i] = str_ver
+            break
+    
 
-    # Replace old_string with new vertices, blocks, and edges
-    for key, value in vertices.items():
-        content = content.replace(contents_to_modify['vert_template'], value)
-
-    for key, value in blocks.items():
-        content = content.replace(contents_to_modify['block_template'], value)
-
-    for key, value in edges.items():
-        content = content.replace(contents_to_modify['edge_template'], value)
-
-    with open('blockMeshDict_' + str(len(vertices)), 'w') as f:
-        f.write(content)
+# Write the modified lines back to the file
+    with open("/Users/treygower/Desktop/blockMeshDict_updated.txt", "w") as file:
+        file.writelines(lines)
 
     
 def main():
@@ -119,6 +129,7 @@ n, Lf, Lw, R, H, arcs = params()
 vertices = generate_vertices(n,R,H,Lw,Lf)
 print(len(vertices))
 print(vertices)
+mesh_file(vertices, Lf,R)
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """

@@ -1,4 +1,5 @@
 import numpy as np
+import math
 from collections import OrderedDict
 """
 Mesh generation script for cylinder 
@@ -10,11 +11,15 @@ def params():
     """ 
     enter paramters for cylinder
     """
-
-    n = int(input('Enter number of vertices: ')) #enter number of vertices
-    R = int(input('Enter R: ')) 
-    H = int(input('Enter H: ')) 
-    Lw = int(input('Enter Lw: ')) 
+    Lw = 0
+    #we will always have 64 vertices
+    n = 64
+    R = float(input('Enter R: ')) 
+    H = int(input('Enter H: '))
+    while Lw < 3*(R*2): 
+        Lw = int(input('Enter Lw: ')) 
+        if Lw < 3*(R*2):
+            print('Lw must be 3 diameters greater')
     Lf= int(input('Enter Lf: ')) 
 
 
@@ -48,17 +53,14 @@ def generate_blocks(n):
     return blocks
 
 def generate_vertices(n,R,H,Lf,Lw):
-    s_pole = [0, 0.5, -0.5] #North pole
-    n_pole = [0, 0.5, 0.5] #North pole
-    
     D = R*2
     # Generate vertices around the circumference of inner cylinder
     #We want 8 vertices around each block so n//8
     # Calculate angle increment
-    vertices = np.zeros((n,3))
+    vertices = np.zeros((n//8,3))
     angle_increment = 2 * np.pi / (n//8)
-
-    for i in range((n//4)-1):
+    k=0; l =0
+    for i in range((n//8)):
         angle = i * angle_increment
         if i <= 8:
             for j in range(3):
@@ -66,25 +68,42 @@ def generate_vertices(n,R,H,Lf,Lw):
                     vertices[i, j] = R* np.cos(angle)
                 if j == 1:
                     vertices[i, j] = R* np.sin(angle)
-                else:
+                if j ==2:
                     vertices[i, j] = -.5
+    vertices1 = np.zeros((n//8,3))
+    for i in range(n//8): 
+        angle1 = (np.pi*2) * i / (n//8) 
+        vertices1[i,0] = np.cos(angle1)
+        vertices1[i,1] = np.sin(angle1)
+        vertices1[i,2] = -.5 
+    vertices = np.concatenate((vertices, vertices1), axis=0)
+    grid_start = np.array((6, 0 ,-.5))
+    vertices = np.concatenate((vertices, np.zeros((n//4,3))), axis=0)
+    for i in range((n//4)-1, , 1):
+        #x vertices
+        if i == 15 or k == 2:
+            #Vertex 16 will always be this:
+            vertices[i,0] = Lw 
+            vertices[i, 1] = vertices[0,1]
+            vertices[i, 2] = -.5
+            if k == 2 and l != 4:
+                l +=1
+                vertices[i, 0] = vertices[i-1, 0] - (D+R+Lw)
+            if l ==4:
+                k = 0
         else:
-            for j in range(3):
-                if j == 0:
-                    vertices[i, j] = (D+R)* np.cos(angle)
-                if j == 1:
-                    vertices[i, j] = (D+R)* np.sin(angle)
-                else:
-                    vertices[i, j] = -.5
-    '''
-    for i in range(31,(n//4)-1, -1):
-        for j in range(3):
-            vertices[i, j] = (r+R+Lw) + vertices[i, j]
-            if j == 1:
-                vertices[i, j] = vertices[i, j]
-            else:
-                vertices[i, j] = -.5
-    '''
+        #y vertices
+            if k!=2 and l==0:
+                vertices[i, 0] = vertices[i-1,0]
+                vertices[i, 1] = (D+R+Lw) + vertices[i-1, 1]
+                vertices[i, 2] = -.5
+                k += 1
+            #Final few vertices for upper half of grid
+            if l ==4 and k ==0:
+                vertices[i, 0] = vertices[i-1,0]
+                vertices[i, 1] = vertices[i-1, 1] - (D+R+Lw)
+                vertices[i, 2] = -.5
+
     return vertices
         
 
@@ -102,7 +121,7 @@ def mesh_file(vertices, blocks, edges):
     with open("/Users/treygower/Desktop/blockMeshDict.template", "r") as file:
         lines = file.readlines()
     for i in range(len(vertices)):
-        str_ver = str_ver + str(vertices[i]) + f' // {i}\n'
+        str_ver = str_ver + str(tuple(vertices[i])) + f' // {i}\n'
     # Iterate over the lines and replace the specified line
     for i, line in enumerate(lines):
         if contents_to_modify['vert_template'] in line:
@@ -116,7 +135,7 @@ def mesh_file(vertices, blocks, edges):
 
     
 def main():
-    """ Main entry point """
+    """ Main entry vertices  """
 n, Lf, Lw, R, H, arcs = params()
 vertices = generate_vertices(n,R,H,Lf,Lw)
 print(len(vertices))

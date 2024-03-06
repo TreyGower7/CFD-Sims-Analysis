@@ -77,33 +77,59 @@ def generate_vertices(n,R,H,Lf,Lw):
         vertices1[i,1] = np.sin(angle1)
         vertices1[i,2] = -.5 
     vertices = np.concatenate((vertices, vertices1), axis=0)
-    grid_start = np.array((6, 0 ,-.5))
     vertices = np.concatenate((vertices, np.zeros((n//4,3))), axis=0)
-    for i in range((n//4)-1, , 1):
-        #x vertices
-        if i == 15 or k == 2:
-            #Vertex 16 will always be this:
+    #Manually entering the first quadrant
+    #point 16
+    vertices[16,0] = Lw 
+    vertices[16, 1] = vertices[0,1]
+    vertices[16, 2] = -.5  
+    #point 17
+    vertices[17,0] = Lw
+    vertices[17, 1] = vertices[9,1]
+    vertices[17, 2] = -.5  
+    #point 19
+    vertices[19,0] = vertices[9,0]
+    vertices[19, 1] = H
+    vertices[19, 2] = -.5  
+    #point 18
+    vertices[18,0] =  vertices[17, 0]
+    vertices[18, 1] = H
+    vertices[18, 2] = -.5  
+    #point 20
+    vertices[20,0] = 0
+    vertices[20, 1] = H
+    vertices[20, 2] = -.5  
+    
+    vertices[21:25,0] = -vertices[16:20,0]
+    vertices[21:25,1] = vertices[16:20,1]
+    vertices[21:25,2] = -.5
+
+    #for i in range(20, 31,1):
+    #    vertices[i,0] = 
+
+    '''
+    #Populate the first quadrant with vertices
+    for i in range((n//4), 20, 1):
+        if i == (n//4):
+            #Vertex in the middle will always be this:
             vertices[i,0] = Lw 
             vertices[i, 1] = vertices[0,1]
             vertices[i, 2] = -.5
-            if k == 2 and l != 4:
-                l +=1
-                vertices[i, 0] = vertices[i-1, 0] - (D+R+Lw)
-            if l ==4:
-                k = 0
+            continue;
         else:
-        #y vertices
-            if k!=2 and l==0:
-                vertices[i, 0] = vertices[i-1,0]
-                vertices[i, 1] = (D+R+Lw) + vertices[i-1, 1]
-                vertices[i, 2] = -.5
-                k += 1
-            #Final few vertices for upper half of grid
-            if l ==4 and k ==0:
-                vertices[i, 0] = vertices[i-1,0]
-                vertices[i, 1] = vertices[i-1, 1] - (D+R+Lw)
-                vertices[i, 2] = -.5
+           for i in range(len(vertices)):
+                if vertices[i,0] > 0 and vertices[i,1] > 0:
+                    if i - 
 
+            vertices[i, 0] = vertices[i-1,0]
+            vertices[i, 1] = vertices[i-1, 1] - (D+R)
+            vertices[i, 2] = -.5
+        vertices[i, 0] = vertices[i-1, 0] - (D+R+Lw)
+        vertices[i, 0] = vertices[i-1,0]
+        vertices[i, 1] = (D+R+Lw) + vertices[i-1, 1]
+        vertices[i, 2] = -.5
+        
+    '''
     return vertices
         
 

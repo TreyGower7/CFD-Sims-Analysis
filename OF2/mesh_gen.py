@@ -27,30 +27,7 @@ def params():
     #blocks = generate_blocks(n)
     return n, Lf, Lw, R, H, arcs
 
-def generate_blocks(n):
-    """
-    Generate the blocks
-    """
-    #Assumes each cube has 192 vertices
-    blocks = []
-    cubes = n+1 // 24
-    for i in range(cubes):
-        for j in range(8):
-            for k in range(8):
-                # Calculate the indices of the vertices
-                v0 = i*8*8 + j*8 + k
-                v1 = v0 + 1
-                v2 = v0 + 8
-                v3 = v2 + 1
-                v4 = v0 + 8*8
-                v5 = v4 + 1
-                v6 = v4 + 8
-                v7 = v6 + 1
-                
-                # Create a block using the calculated vertex indices
-                block = f'hex ({v0} {v1} {v3} {v2} {v4} {v5} {v7} {v6}) (1 1 1)'
-                blocks.append(block)
-    return blocks
+def grading():
 
 def generate_vertices(n,R,H,Lf,Lw):
     D = R*2

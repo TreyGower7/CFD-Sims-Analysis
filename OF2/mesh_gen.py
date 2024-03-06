@@ -59,6 +59,7 @@ def generate_vertices(n,R,H,Lf,Lw):
     # Calculate angle increment
     vertices = np.zeros((n//8,3))
     angle_increment = 2 * np.pi / (n//8)
+    z= .05
     k=0; l =0
     for i in range((n//8)):
         angle = i * angle_increment
@@ -69,58 +70,58 @@ def generate_vertices(n,R,H,Lf,Lw):
                 if j == 1:
                     vertices[i, j] = R* np.sin(angle)
                 if j ==2:
-                    vertices[i, j] = -.5
+                    vertices[i, j] = -z
     vertices1 = np.zeros((n//8,3))
     for i in range(n//8): 
         angle1 = (np.pi*2) * i / (n//8) 
         vertices1[i,0] = np.cos(angle1)
         vertices1[i,1] = np.sin(angle1)
-        vertices1[i,2] = -.5 
+        vertices1[i,2] = -z
     vertices = np.concatenate((vertices, vertices1), axis=0)
     vertices = np.concatenate((vertices, np.zeros((n//4,3))), axis=0)
     #Manually entering the first quadrant
     #point 16
     vertices[16,0] = Lw 
     vertices[16, 1] = vertices[0,1]
-    vertices[16, 2] = -.5  
+    vertices[16, 2] = -z 
     #point 17
     vertices[17,0] = Lw
     vertices[17, 1] = vertices[9,1]
-    vertices[17, 2] = -.5  
+    vertices[17, 2] = -z  
     #point 19
     vertices[19,0] = vertices[9,0]
     vertices[19, 1] = H
-    vertices[19, 2] = -.5  
+    vertices[19, 2] = -z 
     #point 18
     vertices[18,0] =  vertices[17, 0]
     vertices[18, 1] = H
-    vertices[18, 2] = -.5  
+    vertices[18, 2] = -z  
     #point 20
     vertices[20,0] = 0
     vertices[20, 1] = H
-    vertices[20, 2] = -.5  
+    vertices[20, 2] = -z  
     
     #point 21
     vertices[21,0] = -vertices[11,1] 
     vertices[21, 1] = H
-    vertices[21, 2] = -.5  
+    vertices[21, 2] = -z 
     #point 22
     vertices[22,0] = -Lf
     vertices[22, 1] = H
-    vertices[22, 2] = -.5  
+    vertices[22, 2] = -z  
     #point 23
     vertices[23,0] = -Lf
     vertices[23, 1] = vertices[11,1] 
-    vertices[23, 2] = -.5  
+    vertices[23, 2] = -z  
     #point 24
     vertices[24,0] =  -Lf
     vertices[24, 1] = 0
-    vertices[24, 2] = -.5  
+    vertices[24, 2] = -z  
     j=1
     for i in range(25, 32, 1):
         vertices[i,0] = vertices[i-(2*j),0]
         vertices[i,1] = -vertices[i-(2*j),1]
-        vertices[i,2] = -.5
+        vertices[i,2] = -z
         j +=1;
     vertices = np.concatenate((vertices, vertices), axis=0)
     vertices[32:, 2] = -vertices[32:,2]

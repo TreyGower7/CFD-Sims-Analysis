@@ -117,16 +117,14 @@ def generate_vertices(n,R,H,Lf,Lw):
     vertices[24, 1] = 0
     vertices[24, 2] = -.5  
     j=1
-    for i in range(25, 28, 1):
+    for i in range(25, 32, 1):
         vertices[i,0] = vertices[i-(2*j),0]
         vertices[i,1] = -vertices[i-(2*j),1]
         vertices[i,2] = -.5
         j +=1;
-    for i in range(29, 31, 1):
-        vertices[i,0] = vertices[i-(2*j),0]
-        vertices[i,1] = -vertices[i-(2*j),1]
-        vertices[i,2] = -.5
-        j +=1;
+    vertices = np.concatenate((vertices, vertices), axis=0)
+    vertices[32:, 2] = -vertices[32:,2]
+
     return vertices
         
 

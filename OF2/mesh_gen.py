@@ -100,36 +100,33 @@ def generate_vertices(n,R,H,Lf,Lw):
     vertices[20, 1] = H
     vertices[20, 2] = -.5  
     
-    vertices[21:25,0] = -vertices[16:20,0]
-    vertices[21:25,1] = vertices[16:20,1]
-    vertices[21:25,2] = -.5
-
-    #for i in range(20, 31,1):
-    #    vertices[i,0] = 
-
-    '''
-    #Populate the first quadrant with vertices
-    for i in range((n//4), 20, 1):
-        if i == (n//4):
-            #Vertex in the middle will always be this:
-            vertices[i,0] = Lw 
-            vertices[i, 1] = vertices[0,1]
-            vertices[i, 2] = -.5
-            continue;
-        else:
-           for i in range(len(vertices)):
-                if vertices[i,0] > 0 and vertices[i,1] > 0:
-                    if i - 
-
-            vertices[i, 0] = vertices[i-1,0]
-            vertices[i, 1] = vertices[i-1, 1] - (D+R)
-            vertices[i, 2] = -.5
-        vertices[i, 0] = vertices[i-1, 0] - (D+R+Lw)
-        vertices[i, 0] = vertices[i-1,0]
-        vertices[i, 1] = (D+R+Lw) + vertices[i-1, 1]
-        vertices[i, 2] = -.5
-        
-    '''
+    #point 21
+    vertices[21,0] = -vertices[11,1] 
+    vertices[21, 1] = H
+    vertices[21, 2] = -.5  
+    #point 22
+    vertices[22,0] = -Lf
+    vertices[22, 1] = H
+    vertices[22, 2] = -.5  
+    #point 23
+    vertices[23,0] = -Lf
+    vertices[23, 1] = vertices[11,1] 
+    vertices[23, 2] = -.5  
+    #point 24
+    vertices[24,0] =  -Lf
+    vertices[24, 1] = 0
+    vertices[24, 2] = -.5  
+    j=1
+    for i in range(25, 28, 1):
+        vertices[i,0] = vertices[i-(2*j),0]
+        vertices[i,1] = -vertices[i-(2*j),1]
+        vertices[i,2] = -.5
+        j +=1;
+    for i in range(29, 31, 1):
+        vertices[i,0] = vertices[i-(2*j),0]
+        vertices[i,1] = -vertices[i-(2*j),1]
+        vertices[i,2] = -.5
+        j +=1;
     return vertices
         
 

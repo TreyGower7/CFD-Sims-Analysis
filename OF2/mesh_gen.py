@@ -148,7 +148,7 @@ def mesh_file(vertices, blocks, edges):
     
     index = 0;
     
-    with open("/Users/treygower/Desktop/blockMeshDict.template", "r") as file:
+    with open("/home1/09043/tagower/CFD_repo/OF2/blockMeshDict.template", "r") as file:
         lines = file.readlines()
     
     for i, line in enumerate(lines):
@@ -157,7 +157,7 @@ def mesh_file(vertices, blocks, edges):
             break
 
 # Write the modified lines back to the file
-    with open("/Users/treygower/Desktop/blockMeshDict_updated.txt", "w") as file:
+    with open("/home1/09043/tagower/CFD_repo/OF2/blockMeshDict", "w") as file:
         file.writelines(lines)
 
     

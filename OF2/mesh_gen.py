@@ -143,13 +143,13 @@ def mesh_file(vertices, blocks, edges):
     print(formatted_string)
     #Modifing a specific template and saving as a new output
     
-    contents_to_modify = {'vert_template': '// ( 1.0000000000000000e+01 -7.0710678118654746e-01  5.0000000000000003e-02) // 63',
+    contents_to_modify = {'vert_template': '   ( 7.0710678118654735e-01 -7.0710678118654768e-01 -5.0000000000000003e-02) // 15',
                           'block_template': '// hex (0 8 9 1 32 40 41 33) (10 20 1) simpleGrading ( 2.00000e+00  1.00000e+00 1.0)',
                           'edge_template': '// arc 0 1 ( 4.61940e-01  1.91342e-01 -5.00000e-02)'}
     
     index = 0;
     
-    with open("/home1/09043/tagower/CFD_repo/OF2/blockMeshDict.template", "r") as file:
+    with open("/home1/09043/tagower/CFD_repo/OF2/blockMeshDict1.example", "r") as file:
         lines = file.readlines()
     
     for i, line in enumerate(lines):

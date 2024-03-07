@@ -122,7 +122,7 @@ def mesh_file(vertices, blocks, edges):
     formatted_string = "   ("
     i = 0
     for row in vertices:
-        formatted_string += " ".join([f"{val: .16e}" for val in row]) + f") // {i}\n("
+        formatted_string += " ".join([f"{val: .16e}" for val in row]) + f") // {i}\n   ("
         i += 1;
     formatted_string = formatted_string[:-2]  # Remove the extra "( " at the end
 

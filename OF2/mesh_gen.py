@@ -14,9 +14,9 @@ def params():
     Lw = 0
     #we will always have 64 vertices
     n = 64
-    R = float(input('Enter R: ')) 
+    R = .5
     H = int(input('Enter H: '))
-    while Lw < 3*(R*2): 
+    while Lw < (3*(R*2))+1: 
         Lw = int(input('Enter Lw: ')) 
         if Lw < 3*(R*2):
             print('Lw must be 3 diameters greater')
@@ -24,10 +24,7 @@ def params():
 
 
     arcs = n/2
-    #blocks = generate_blocks(n)
     return n, Lf, Lw, R, H, arcs
-
-def grading():
 
 def generate_vertices(n,R,H,Lf,Lw):
     D = R*2
@@ -104,13 +101,25 @@ def generate_vertices(n,R,H,Lf,Lw):
     vertices[32:, 2] = -vertices[32:,2]
 
     return vertices
-        
+'''      
+def grading(lines):
 
+    #only increasing resolution in these block
+    blocks_change = [0,1,2,5,6,7,8,9,10,17,18, 19]
+
+    for j in range(len(blocks_change)):
+        for i, line in enumerate(lines):
+            if f'   // block {j}' in line:
+                k = i+1
+
+                lines[i] = formatted_string
+                break
+'''
 def mesh_file(vertices, blocks, edges):
     """ 
     saves the mesh in an openfoam readable format based on the example given
     """
-    formatted_string = "("
+    formatted_string = "   ("
     i = 0
     for row in vertices:
         formatted_string += " ".join([f"{val: .16e}" for val in row]) + f") // {i}\n("
@@ -126,16 +135,24 @@ def mesh_file(vertices, blocks, edges):
     
     index = 0;
     
-    with open("/home1/09043/tagower/CFD_repo/OF2/blockMeshDict1.example", "r") as file:
+    with open("./blockMeshDict1.example", "r") as file:
         lines = file.readlines()
     
     for i, line in enumerate(lines):
         if contents_to_modify['vert_template'] in line:
             lines[i] = formatted_string
             break
-
+    '''
+    yorn = None
+    while yorn != 'y' or yorn != 'n':
+        yorn = input('Would you like to change Resolution? (y/n): ')
+        if yorn == 'y':
+            graded = grading(lines)
+        else: 
+            print('enter y or n')
+    '''
 # Write the modified lines back to the file
-    with open("/home1/09043/tagower/CFD_repo/OF2/blockMeshDict", "w") as file:
+    with open("./blockMeshDict", "w") as file:
         file.writelines(lines)
 
     

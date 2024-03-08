@@ -115,6 +115,7 @@ def grading(lines):
     ]
     print('Once done editing mesh grading save by typing: done or d')
     block = ""
+    last_block = 0
     while block != 'done' and block != 'd':
         block = ""
         while not block.isdigit() or int(block) >= 20:

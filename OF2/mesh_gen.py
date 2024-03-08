@@ -134,13 +134,14 @@ def grading(lines):
 
         for i, line in enumerate(template):
             if f'   // block {j}' in line:
+                print(template[i])
                 print(f'Enter grading along x or y for block {j}')
                 x = input('x grade: ')
                 y = input('y grade: ')
                 formatted_grade = f'{x} {y} {1}'
                 for pattern in patterns:
                     compiled_pattern = re.compile(pattern)  # Compile the pattern for efficiency
-                    match = compiled_pattern.search(template[i+1])  # Check if the pattern is in the line
+                    match = compiled_pattern.search(template[i])  # Check if the pattern is in the line
                     if match:
                         break
 

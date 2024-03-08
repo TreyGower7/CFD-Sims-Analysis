@@ -105,55 +105,40 @@ def generate_vertices(n,R,H,Lf,Lw):
 
 def grading(lines):
     #preserve the template
-    template = lines
-    patterns = [
-    r"\b(10 20 1)\b",
-    r"\b(30 20 1)\b",  
-    r"\b(20 30 1)\b",
-    r"\b(30 30 1)\b",
-    r"\b(15 30 1)\b"   
-    ]
-    print('Once done editing mesh grading save by typing: done or d')
+    org_data = lines
     block = ""
-    last_block = None
+    new_values = ""
     while block != 'done' and block != 'd':
         block = ""
-        while not block.isdigit() or int(block) >= 20 or int(block) == last_block:
+        while not block.isdigit() or int(block) >= 20:
             block = input("Input the block to change grading of: ")
             if block == 'done' or block == 'd':
                 break
-            if int(block) == last_block:
-                print("No duplicate blocks please\n")
-            
 
             if not block.isdigit() or int(block) >= 20:
                 print("Invalid block number. Please enter an integer less than 20.")
                 continue
-
         if block == 'done' or block == 'd':
             break
 
-        j = int(block)
-        last_block = j
-        for i, line in enumerate(template):
-            if f'   // block {j}' in line:
-                print('Selected Block Info:\n' + lines[i+1])
-                print(f'Enter grading along x or y for block {j}')
+
+        #Finds Pattern for a given block
+        for i in range(len(org_data)):
+            if f'   // block {block}\n' == org_data[i]:
+                print('Current Block org_data:\n' + lines[i+1])
+                print(f'Enter desired grading along x or y for block {block}')
                 x = input('x grade: ')
                 y = input('y grade: ')
-                formatted_grade = f'{x} {y} {1}'
-                for pattern in patterns:
-                    compiled_pattern = re.compile(pattern)  # Compile the pattern for efficiency
-                    match = compiled_pattern.search(template[i+1])  # Check if the pattern is in the line
-                    if match:
-                        break
-
-                # Replace every instance of the pattern
-                for k, line in enumerate(template):
-                    match = re.search(compiled_pattern, template[k])
-                    if match:
-                        lines[k] = compiled_pattern.sub(formatted_grade, line)
-                        print(f'Grading block surrounding blocks')
+                new_values = f'{x} {y} {1}'
+                grade_pattern = r'\(\s*(\d+)\s+(\d+)\s+(\d+)\s*\)'
+                # Search for the pattern in the line
+                match = re.search(grade_pattern, org_data[i+1])
+                dim = match.groups()
+                pat = f'({dim[0]} {dim[1]} 1)'
+                break
+        # Go through the file again and replace all matching patterns
+        for j in range(len(org_data)):
+            lines[j] = re.sub(pat, new_values, org_data[j])
     return lines
 
 def mesh_file(vertices):

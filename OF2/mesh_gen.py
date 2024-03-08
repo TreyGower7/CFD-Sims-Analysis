@@ -196,8 +196,12 @@ def mesh_file(vertices):
             print('enter y or n')
     
 # Write the modified lines back to the file
-    with open("./blockMeshDict", "w") as file:
-        file.writelines(graded)
+    if yorn == 'y':
+        with open("./blockMeshDict", "w") as file:
+            file.writelines(graded)
+    else:
+        with open("./blockMeshDict", "w") as file:
+            file.writelines(lines)
 
     
 def main():

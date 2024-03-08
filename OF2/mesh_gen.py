@@ -179,26 +179,27 @@ def mesh_file(vertices, blocks, edges):
         if contents_to_modify['vert_template'] in line:
             lines[i] = formatted_string
             break
-    
+    #Adjust grading
     yorn = None
     while yorn != 'y' or yorn != 'n':
         yorn = input('Would you like to change Resolution? (y/n): ')
         if yorn == 'y':
             graded = grading(lines)
+            break
+        if yorn == 'n':
+            break
         else: 
             print('enter y or n')
     
 # Write the modified lines back to the file
     with open("./blockMeshDict", "w") as file:
-        file.writelines(lines)
+        file.writelines(graded)
 
     
 def main():
     """ Main entry vertices  """
 n, Lf, Lw, R, H, arcs = params()
 vertices = generate_vertices(n,R,H,Lf,Lw)
-print(len(vertices))
-print(vertices)
 mesh_file(vertices, H, R)
 
 if __name__ == "__main__":

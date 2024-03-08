@@ -16,12 +16,12 @@ def params():
     #we will always have 64 vertices
     n = 64
     R = .5
-    H = int(input('Enter H: '))
+    H = float(input('Enter H: '))
     while Lw < (3*(R*2))+1: 
-        Lw = int(input('Enter Lw: ')) 
+        Lw = float(input('Enter Lw: ')) 
         if Lw < 3*(R*2):
             print('Lw must be 3 diameters greater')
-    Lf= int(input('Enter Lf: ')) 
+    Lf= float(input('Enter Lf: ')) 
 
 
     arcs = n/2

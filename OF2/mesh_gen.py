@@ -114,6 +114,7 @@ def grading(lines):
     r"\b(15 30 1)\b"   
     ]
     print('Once done editing mesh grading save by typing: done or d')
+    block = ""
     last_block = None
     while block != 'done' and block != 'd':
         block = ""

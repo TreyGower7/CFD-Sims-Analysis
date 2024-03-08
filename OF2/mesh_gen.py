@@ -106,7 +106,6 @@ def generate_vertices(n,R,H,Lf,Lw):
 def grading(lines):
     #preserve the template
     template = lines
-    blocks_change = [0,1,2,5,6,7,8,9,10,17,18,19]
     patterns = [
     r"\b(10 20 1)\b",
     r"\b(30 20 1)\b",  
@@ -118,6 +117,7 @@ def grading(lines):
     block = ""
     while block != 'done' and block != 'd':
         block = ""
+        last_block = j
         while not block.isdigit() or int(block) >= 20:
             block = input("Input the block to change grading of: ")
             if block == 'done' or block == 'd':
@@ -125,6 +125,9 @@ def grading(lines):
 
             if not block.isdigit() or int(block) >= 20:
                 print("Invalid block number. Please enter an integer less than 20.")
+                continue
+            if int(block) == last_block:
+                print("No duplicate blocks please\n")
                 continue
 
         if block == 'done' or block == 'd':

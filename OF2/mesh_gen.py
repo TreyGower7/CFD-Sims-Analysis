@@ -138,8 +138,10 @@ def grading(lines):
                 break
         # Go through the file again and replace all matching patterns
         for j in range(len(org_data)):
-            lines[j] = re.sub(pat, new_values, org_data[j])
-            print(f'Grading Bordering Block {lines[j][6:13]}')
+            match = re.search(pat, org_data[i+1])
+            if match:
+                lines[j] = re.sub(pat, new_values, org_data[j])
+                print(f'Grading Bordering Block {lines[j-1][6:13]}')
     return lines
 
 def mesh_file(vertices):

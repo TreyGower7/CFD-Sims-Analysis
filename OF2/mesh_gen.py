@@ -137,12 +137,12 @@ def grading(lines):
                 pat = f'({dim[0]} {dim[1]} 1)'
                 break
         # Go through the file again and replace all matching patterns
-        print('Grading also the Bordering Block:\n')
+        print('Grading Selected and Bordering Blocks:')
         for j in range(len(org_data)):
             if re.search(pat, org_data[j]):
                 # Attempt to identify the block number for reporting
                 if j > 0 and 'block' in org_data[j-1]:
-                    print(org_data[j-1].strip()[2:])
+                    print(org_data[j-1].strip()[3:])
             lines[j] = re.sub(pat, new_values, org_data[j])
     return lines
 

@@ -11,27 +11,27 @@ def grading(lines):
     r"\b(30 30 1)\b",
     r"\b(15 30 1)\b"   
     ]
-    print('Once done editing mesh grading save by typing: done or d')
     block = ""
+    last_block = None
     while block != 'done' and block != 'd':
         block = ""
-        while not block.isdigit() or int(block) >= 20:
+        while not block.isdigit() or int(block) >= 20 or int(block) == last_block:
             block = input("Input the block to change grading of: ")
             if block == 'done' or block == 'd':
                 break
+            if int(block) == last_block:
+                print("No duplicate blocks please\n")
 
             if not block.isdigit() or int(block) >= 20:
                 print("Invalid block number. Please enter an integer less than 20.")
                 continue
-
+        j = int(block)
+        last_block = j
         if block == 'done' or block == 'd':
             break
-
-        j = int(block)
-
         for i, line in enumerate(template):
             if f'   // block {j}' in line:
-                print(lines[i+1])
+                print('Selected Block Info:\n' + lines[i+1])
                 print(f'Enter grading along x or y for block {j}')
                 x = input('x grade: ')
                 y = input('y grade: ')

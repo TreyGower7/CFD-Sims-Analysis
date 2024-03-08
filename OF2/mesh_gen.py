@@ -134,7 +134,7 @@ def grading(lines):
 
         for i, line in enumerate(template):
             if f'   // block {j}' in line:
-                print(lines[i+1])
+                print('Selected Block Info:\n' + lines[i+1])
                 print(f'Enter grading along x or y for block {j}')
                 x = input('x grade: ')
                 y = input('y grade: ')
@@ -153,7 +153,7 @@ def grading(lines):
                         print(f'Grading block surrounding blocks')
     return lines
 
-def mesh_file(vertices, blocks, edges):
+def mesh_file(vertices):
     """ 
     saves the mesh in an openfoam readable format based on the example given
     """
@@ -201,7 +201,7 @@ def main():
     """ Main entry vertices  """
 n, Lf, Lw, R, H, arcs = params()
 vertices = generate_vertices(n,R,H,Lf,Lw)
-mesh_file(vertices, H, R)
+mesh_file(vertices)
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """

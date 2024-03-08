@@ -27,8 +27,6 @@ def params():
     #blocks = generate_blocks(n)
     return n, Lf, Lw, R, H, arcs
 
-def grading():
-
 def generate_vertices(n,R,H,Lf,Lw):
     D = R*2
     # Generate vertices around the circumference of inner cylinder

@@ -141,7 +141,7 @@ def grading(lines):
             if re.search(pat, org_data[j]):
                 # Attempt to identify the block number for reporting
                 if j > 0 and 'block' in org_data[j-1]:
-                    print(org_data[j-1].strip())
+                    print(org_data[j-1].strip()[2:])
             lines[j] = re.sub(pat, new_values, org_data[j])
     return lines
 

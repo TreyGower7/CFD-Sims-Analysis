@@ -117,7 +117,6 @@ def grading(lines):
     block = ""
     while block != 'done' and block != 'd':
         block = ""
-        last_block = j
         while not block.isdigit() or int(block) >= 20:
             block = input("Input the block to change grading of: ")
             if block == 'done' or block == 'd':
@@ -154,6 +153,7 @@ def grading(lines):
                     if match:
                         lines[k] = compiled_pattern.sub(formatted_grade, line)
                         print(f'Grading block surrounding blocks')
+        last_block = j
     return lines
 
 def mesh_file(vertices):

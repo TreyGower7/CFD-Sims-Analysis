@@ -148,7 +148,7 @@ def grading(lines):
                 for k, line in enumerate(template):
                     match = re.search(compiled_pattern, template[k])
                     if match:
-                        template[k] = compiled_pattern.sub(formatted_grade, line)
+                        lines[k] = compiled_pattern.sub(formatted_grade, line)
                         print(f'Grading block surrounding blocks')
     return lines
 

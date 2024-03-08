@@ -1,5 +1,4 @@
 import numpy as np
-import math
 import re
 from collections import OrderedDict
 """
@@ -15,7 +14,7 @@ def params():
     Lw = 0
     #we will always have 64 vertices
     n = 64
-    R = .5
+    R = float(input('Enter Radius: '))
     H = float(input('Enter H: '))
     while Lw < (3*(R*2))+1: 
         Lw = float(input('Enter Lw: ')) 
@@ -102,8 +101,25 @@ def generate_vertices(n,R,H,Lf,Lw):
     vertices[32:, 2] = -vertices[32:,2]
 
     return vertices
+def arc_adjust(lines, vertices):
+    """
+    Adjust arc midpoints based on radius
+    """
+    arcs = lines[94:126]
+
+    for i in range(len(arcs)):
+        pattern = r'arc (\d+) (\d+)'
+        match = re.search(pattern, arcs[i])
+        arc = [match.group(0),int(match.group(1)),int(match.group(2))]
+        #Calculate midpoints
+        quadrant = 
+        mid_x = (np.sqrt(r))
+        vertices[]
 
 def grading(lines):
+    """
+    Serves to adjust the grading of the mesh
+    """
     #preserve the template
     org_data = lines
     block = ""
@@ -146,7 +162,7 @@ def grading(lines):
             lines[j] = re.sub(pat, new_values, org_data[j])
     return lines
 
-def mesh_file(vertices):
+def mesh_file(vertices, R):
     """ 
     saves the mesh in an openfoam readable format based on the example given
     """
@@ -178,27 +194,26 @@ def mesh_file(vertices):
     while yorn != 'y' or yorn != 'n':
         yorn = input('Would you like to change Resolution? (y/n): ')
         if yorn == 'y':
-            graded = grading(lines)
+            lines = grading(lines)
             break
         if yorn == 'n':
             break
         else: 
             print('enter y or n')
-    
+    #Arc adujstment based on radius
+    if R != .5:
+        arc_adjust(lines, vertices)
+
 # Write the modified lines back to the file
-    if yorn == 'y':
-        with open("./blockMeshDict", "w") as file:
-            file.writelines(graded)
-    else:
-        with open("./blockMeshDict", "w") as file:
-            file.writelines(lines)
+    with open("./blockMeshDict", "w") as file:
+        file.writelines(lines)
 
     
 def main():
     """ Main entry vertices  """
 n, Lf, Lw, R, H, arcs = params()
 vertices = generate_vertices(n,R,H,Lf,Lw)
-mesh_file(vertices)
+mesh_file(vertices,R)
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """

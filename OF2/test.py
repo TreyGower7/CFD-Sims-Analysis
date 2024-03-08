@@ -31,6 +31,7 @@ def grading(lines):
 
         for i, line in enumerate(template):
             if f'   // block {j}' in line:
+                print(lines[i+1])
                 print(f'Enter grading along x or y for block {j}')
                 x = input('x grade: ')
                 y = input('y grade: ')
@@ -45,8 +46,9 @@ def grading(lines):
                 for k, line in enumerate(template):
                     match = re.search(compiled_pattern, template[k])
                     if match:
-                        template[k] = compiled_pattern.sub(formatted_grade, line)
+                        lines[k] = compiled_pattern.sub(formatted_grade, line)
                         print(f'Grading block surrounding blocks')
+
     return lines
 
 

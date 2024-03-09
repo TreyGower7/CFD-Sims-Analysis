@@ -11,15 +11,12 @@ def replace_values():
     print(data)
     block = ""
     new_values = ""
-    last_block = None
     while block != 'done' and block != 'd':
         block = ""
-        while not block.isdigit() or int(block) >= 20 or int(block) == last_block:
+        while not block.isdigit() or int(block) >= 20:
             block = input("Input the block to change grading of: ")
             if block == 'done' or block == 'd':
                 break
-            if int(block) == last_block:
-                print("No duplicate blocks please\n")
 
             if not block.isdigit() or int(block) >= 20:
                 print("Invalid block number. Please enter an integer less than 20.")
@@ -27,7 +24,6 @@ def replace_values():
         if block == 'done' or block == 'd':
             break
 
-        last_block = int(block)
 
         #Finds Pattern for a given block
         for i in range(len(data)):

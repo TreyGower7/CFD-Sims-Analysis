@@ -101,20 +101,46 @@ def generate_vertices(n,R,H,Lf,Lw):
     vertices[32:, 2] = -vertices[32:,2]
 
     return vertices
-def arc_adjust(lines, vertices):
+
+def arc_adjust(lines, vertices,R):
     """
     Adjust arc midpoints based on radius
     """
     arcs = lines[94:126]
+    midpoints = np.zeros((len(arcs),2))
 
     for i in range(len(arcs)):
         pattern = r'arc (\d+) (\d+)'
         match = re.search(pattern, arcs[i])
         arc = [match.group(0),int(match.group(1)),int(match.group(2))]
-        #Calculate midpoints
-        quadrant = 
-        mid_x = (np.sqrt(r))
-        vertices[]
+
+        chord_mid = ((vertices[arc[2]][0]+ vertices[arc[1]][0])/2, 
+                     (vertices[arc[2]][1]+ vertices[arc[1]][1])/2)
+        
+        direction_vector = (((vertices[arc[2]][0] - vertices[arc[1]][0])/2), 
+                            (vertices[arc[2]][1] - vertices[arc[1]][1])/2)
+    
+        # Magnitude of direction vector
+        direction_vector_len = np.sqrt(direction_vector[0] ** 2 + direction_vector[1] ** 2)
+        
+        # Normalize the direction vector
+        normalized_vec = (direction_vector[0] / direction_vector_len, 
+                          direction_vector[1] / direction_vector_len)
+        
+        # Calculate the midpoint of the arc
+        arc_midpoint = (chord_mid[0] + normalized_vec[0] * R, 
+                        chord_mid[1] + normalized_vec[1] * R)
+        midpoints[i][0] = arc_midpoint[0]
+        midpoints[i][1] = arc_midpoint[1]
+    #Formating
+    formatted_arcs = f'arc 0 1 '
+    i = 0
+    for row in midpoints:
+        formatted_arcs += " ".join([f"{val: .16e}" for val in row]) + f") // {i}\n{arc[row]} ("
+        i += 1;
+    formatted_string = formatted_string[:-2]  # Remove the extra "( " at the end
+    return formatted_arcs
+        
 
 def grading(lines):
     """
@@ -173,22 +199,22 @@ def mesh_file(vertices, R):
         i += 1;
     formatted_string = formatted_string[:-2]  # Remove the extra "( " at the end
 
-    print(formatted_string)
     #Modifing a specific template and saving as a new output
     
     contents_to_modify = {'vert_template': '   ( 7.0710678118654735e-01 -7.0710678118654768e-01 -5.0000000000000003e-02) // 15',
-                          'block_template': '// hex (0 8 9 1 32 40 41 33) (10 20 1) simpleGrading ( 2.00000e+00  1.00000e+00 1.0)',
-                          'edge_template': '// arc 0 1 ( 4.61940e-01  1.91342e-01 -5.00000e-02)'}
+                          'edge_template': 'arc 0 1 ( 4.61940e-01  1.91342e-01 -5.00000e-02)'}
     
     index = 0;
     
-    with open("./blockMeshDict1.example", "r") as file:
+    with open("./blockMeshDict1.template", "r") as file:
         lines = file.readlines()
     
+    #inserts formatted string of vertices
     for i, line in enumerate(lines):
         if contents_to_modify['vert_template'] in line:
             lines[i] = formatted_string
             break
+
     #Adjust grading
     yorn = None
     while yorn != 'y' or yorn != 'n':
@@ -200,9 +226,15 @@ def mesh_file(vertices, R):
             break
         else: 
             print('enter y or n')
+
     #Arc adujstment based on radius
     if R != .5:
-        arc_adjust(lines, vertices)
+        formatted_arcs = arc_adjust(lines, vertices)
+        #inserts formatted string of arcs and midpoints through arcs
+        for i, line in enumerate(lines):
+            if contents_to_modify['edge_template'] in line:
+                lines[i] = formatted_arcs
+                break
 
 # Write the modified lines back to the file
     with open("./blockMeshDict", "w") as file:

@@ -128,12 +128,10 @@ def arc_adjust(lines, vertices,R):
             midpoints[i][1] = arc_midpoint[1]
             midpoints[i][2] = 0.05
     #Formating
-    formatted_arcs = f'arc 0 1 ('
-    i = 0
-    for row in midpoints:
-        formatted_arcs += " ".join([f"{val: .16e}" for val in row]) + f") // {i}\n{heads[i+1]} ("
-        i += 1;
-    formatted_arcs = formatted_arcs[:-2]  # Remove the extra "( " at the end
+    formatted_arcs = ''
+    for row in range(len(midpoints)):
+        formatted_arc = f"{heads[row]} ( {midpoints[row][0]: .5e}  {midpoints[row][1]: .5e} -5.00000e-02)\n"
+        formatted_arcs += formatted_arc    
     return formatted_arcs
         
 with open("/Users/treygower/Desktop/blockMeshDict1.example", "r") as file:

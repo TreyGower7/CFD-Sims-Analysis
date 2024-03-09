@@ -229,7 +229,7 @@ def mesh_file(vertices, R):
 
     #Arc adujstment based on radius
     if R != .5:
-        formatted_arcs = arc_adjust(lines, vertices)
+        formatted_arcs = arc_adjust(lines, vertices,R)
         #inserts formatted string of arcs and midpoints through arcs
         for i, line in enumerate(lines):
             if contents_to_modify['edge_template'] in line:

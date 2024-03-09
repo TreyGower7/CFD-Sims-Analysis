@@ -10,9 +10,9 @@ def params():
     n = 64
     R = float(input('Enter Radius: '))
     H = float(input('Enter H: '))
-    while Lw < (3*(R*2))+1: 
+    while Lw < (3*(R*2)): 
         Lw = float(input('Enter Lw: ')) 
-        if Lw < (3*(R*2))+1:
+        if Lw < (3*(R*2)):
             print('Lw must be 3 diameters greater')
     Lf= float(input('Enter Lf: ')) 
 
@@ -102,6 +102,14 @@ def arc_adjust(lines, vertices,R):
     arcs = lines[94:126]
     midpoints = np.zeros((len(arcs),3))
     heads = []
+    zpat = r'-?5\.00000e-02'
+    # Extract the z-coordinate from each match since these dont change
+    z_coords = []
+    for string in arcs:
+        match = re.search(zpat, string)
+        if match:
+            z_coords.append(float(match.group()))
+
     for i in range(len(arcs)):
         pattern = r'arc (\d+) (\d+)'
         match = re.search(pattern, arcs[i])
@@ -110,7 +118,6 @@ def arc_adjust(lines, vertices,R):
             heads.append(arc[0])
             chord_mid = ((vertices[arc[2]][0]+ vertices[arc[1]][0])/2, 
                         (vertices[arc[2]][1]+ vertices[arc[1]][1])/2)
-            
             direction_vector = (((vertices[arc[2]][0] - vertices[arc[1]][0])/2), 
                                 (vertices[arc[2]][1] - vertices[arc[1]][1])/2)
         
@@ -130,7 +137,7 @@ def arc_adjust(lines, vertices,R):
     #Formating
     formatted_arcs = ''
     for row in range(len(midpoints)):
-        formatted_arc = f"{heads[row]} ( {midpoints[row][0]: .5e}  {midpoints[row][1]: .5e} -5.00000e-02)\n"
+        formatted_arc = f"{heads[row]} ( {midpoints[row][0]: .5e}  {midpoints[row][1]: .5e} {z_coords[row]: .5e})\n"
         formatted_arcs += formatted_arc    
     return formatted_arcs
         

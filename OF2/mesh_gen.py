@@ -132,6 +132,7 @@ def arc_adjust(lines, vertices,R):
                         chord_mid[1] + normalized_vec[1] * R)
         midpoints[i][0] = arc_midpoint[0]
         midpoints[i][1] = arc_midpoint[1]
+        
     #Formating
     formatted_arcs = f'arc 0 1 '
     i = 0

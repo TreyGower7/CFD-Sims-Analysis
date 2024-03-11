@@ -14,13 +14,13 @@ def params():
     Lw = 0
     #we will always have 64 vertices
     n = 64
-    R = float(input('Enter Radius: '))
+    R = .5
     H = float(input('Enter H: '))
     
-    #while Lw < (3*(R*2)): 
-    Lw = float(input('Enter Lw: ')) 
-    #    if Lw < 3*(R*2):
-    #        print('Lw must be 3 diameters greater')
+    while Lw < (3*(R*2)): 
+        Lw = float(input('Enter Lw: ')) 
+        if Lw < 3*(R*2):
+            print('Lw must be 3 diameters greater')
     Lf= float(input('Enter Lf: ')) 
 
 

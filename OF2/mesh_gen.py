@@ -16,10 +16,11 @@ def params():
     n = 64
     R = float(input('Enter Radius: '))
     H = float(input('Enter H: '))
-    while Lw < (3*(R*2))+1: 
-        Lw = float(input('Enter Lw: ')) 
-        if Lw < 3*(R*2):
-            print('Lw must be 3 diameters greater')
+    
+    #while Lw < (3*(R*2)): 
+    Lw = float(input('Enter Lw: ')) 
+    #    if Lw < 3*(R*2):
+    #        print('Lw must be 3 diameters greater')
     Lf= float(input('Enter Lf: ')) 
 
 
@@ -101,53 +102,6 @@ def generate_vertices(n,R,H,Lf,Lw):
     vertices[32:, 2] = -vertices[32:,2]
 
     return vertices
-
-def arc_adjust(lines, vertices,R):
-    """
-    Adjust arc midpoints based on radius
-    """
-    arcs = lines[94:126]
-    midpoints = np.zeros((len(arcs),3))
-    heads = []
-    zpat = r'-?5\.00000e-02'
-    # Extract the z-coordinate from each match since these dont change
-    z_coords = []
-    for string in arcs:
-        match = re.search(zpat, string)
-        if match:
-            z_coords.append(float(match.group()))
-
-    for i in range(len(arcs)):
-        pattern = r'arc (\d+) (\d+)'
-        match = re.search(pattern, arcs[i])
-        if match:
-            arc = [match.group(0),int(match.group(1)),int(match.group(2))]
-            heads.append(arc[0])
-            chord_mid = ((vertices[arc[2]][0]+ vertices[arc[1]][0])/2, 
-                        (vertices[arc[2]][1]+ vertices[arc[1]][1])/2)
-            direction_vector = (((vertices[arc[2]][0] - vertices[arc[1]][0])/2), 
-                                (vertices[arc[2]][1] - vertices[arc[1]][1])/2)
-        
-            # Magnitude of direction vector
-            direction_vector_len = np.sqrt(direction_vector[0] ** 2 + direction_vector[1] ** 2)
-            
-            # Normalize the direction vector
-            normalized_vec = (direction_vector[0] / direction_vector_len, 
-                            direction_vector[1] / direction_vector_len)
-            
-            # Calculate the midpoint of the arc
-            arc_midpoint = (chord_mid[0] + normalized_vec[0] * R, 
-                            chord_mid[1] + normalized_vec[1] * R)
-            midpoints[i][0] = arc_midpoint[0]
-            midpoints[i][1] = arc_midpoint[1]
-            midpoints[i][2] = 0.05
-    #Formating
-    formatted_arcs = ''
-    for row in range(len(midpoints)):
-        formatted_arc = f"{heads[row]} ( {midpoints[row][0]: .5e}  {midpoints[row][1]: .5e} {z_coords[row]: .5e})\n"
-        formatted_arcs += formatted_arc    
-    return formatted_arcs
-        
 
 def grading(lines):
     """
@@ -233,15 +187,6 @@ def mesh_file(vertices, R):
             break
         else: 
             print('enter y or n')
-
-    #Arc adujstment based on radius
-    if R != .5:
-        formatted_arcs = arc_adjust(lines, vertices,R)
-        #inserts formatted string of arcs and midpoints through arcs
-        for i, line in enumerate(lines):
-            if contents_to_modify['edge_template'] in line:
-                lines[i] = formatted_arcs
-                break
 
 # Write the modified lines back to the file
     with open("./blockMeshDict", "w") as file:

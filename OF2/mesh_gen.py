@@ -107,39 +107,45 @@ def arc_adjust(lines, vertices,R):
     Adjust arc midpoints based on radius
     """
     arcs = lines[94:126]
-    midpoints = np.zeros((len(arcs),2))
+    midpoints = np.zeros((len(arcs),3))
+    heads = []
+    zpat = r'-?5\.00000e-02'
+    # Extract the z-coordinate from each match since these dont change
+    z_coords = []
+    for string in arcs:
+        match = re.search(zpat, string)
+        if match:
+            z_coords.append(float(match.group()))
 
     for i in range(len(arcs)):
         pattern = r'arc (\d+) (\d+)'
         match = re.search(pattern, arcs[i])
-        arc = [match.group(0),int(match.group(1)),int(match.group(2))]
-
-        chord_mid = ((vertices[arc[2]][0]+ vertices[arc[1]][0])/2, 
-                     (vertices[arc[2]][1]+ vertices[arc[1]][1])/2)
+        if match:
+            arc = [match.group(0),int(match.group(1)),int(match.group(2))]
+            heads.append(arc[0])
+            chord_mid = ((vertices[arc[2]][0]+ vertices[arc[1]][0])/2, 
+                        (vertices[arc[2]][1]+ vertices[arc[1]][1])/2)
+            direction_vector = (((vertices[arc[2]][0] - vertices[arc[1]][0])/2), 
+                                (vertices[arc[2]][1] - vertices[arc[1]][1])/2)
         
-        direction_vector = (((vertices[arc[2]][0] - vertices[arc[1]][0])/2), 
-                            (vertices[arc[2]][1] - vertices[arc[1]][1])/2)
-    
-        # Magnitude of direction vector
-        direction_vector_len = np.sqrt(direction_vector[0] ** 2 + direction_vector[1] ** 2)
-        
-        # Normalize the direction vector
-        normalized_vec = (direction_vector[0] / direction_vector_len, 
-                          direction_vector[1] / direction_vector_len)
-        
-        # Calculate the midpoint of the arc
-        arc_midpoint = (chord_mid[0] + normalized_vec[0] * R, 
-                        chord_mid[1] + normalized_vec[1] * R)
-        midpoints[i][0] = arc_midpoint[0]
-        midpoints[i][1] = arc_midpoint[1]
-        
+            # Magnitude of direction vector
+            direction_vector_len = np.sqrt(direction_vector[0] ** 2 + direction_vector[1] ** 2)
+            
+            # Normalize the direction vector
+            normalized_vec = (direction_vector[0] / direction_vector_len, 
+                            direction_vector[1] / direction_vector_len)
+            
+            # Calculate the midpoint of the arc
+            arc_midpoint = (chord_mid[0] + normalized_vec[0] * R, 
+                            chord_mid[1] + normalized_vec[1] * R)
+            midpoints[i][0] = arc_midpoint[0]
+            midpoints[i][1] = arc_midpoint[1]
+            midpoints[i][2] = 0.05
     #Formating
-    formatted_arcs = f'arc 0 1 '
-    i = 0
-    for row in midpoints:
-        formatted_arcs += " ".join([f"{val: .16e}" for val in row]) + f") // {i}\n{arc[row]} ("
-        i += 1;
-    formatted_string = formatted_string[:-2]  # Remove the extra "( " at the end
+    formatted_arcs = ''
+    for row in range(len(midpoints)):
+        formatted_arc = f"{heads[row]} ( {midpoints[row][0]: .5e}  {midpoints[row][1]: .5e} {z_coords[row]: .5e})\n"
+        formatted_arcs += formatted_arc    
     return formatted_arcs
         
 

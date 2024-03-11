@@ -12,6 +12,8 @@ def params():
     enter paramters for cylinder
     """
     Lw = 0
+    H =0
+    Lf =0
     #we will always have 64 vertices
     n = 64
     R = .5

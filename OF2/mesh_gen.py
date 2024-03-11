@@ -199,10 +199,12 @@ def mesh_file(vertices, R):
 # Write the modified lines back to the file
     with open(f"./blockMeshDict_{meshlet}", "w") as file:
         file.writelines(lines)
-    
+    print("---------------\n\n")
+    print("**************\n")
     print(f"Mesh blockMeshDict_{meshlet} has been generated")
+    print("**************\n")
+    print("---------------\n\n")
 
-    
 def main():
     """ Main entry vertices  """
 n, Lf, Lw, R, H = params()

@@ -195,10 +195,12 @@ def mesh_file(vertices, R):
             break
         else: 
             print('enter y or n')
-
+    meshlet = input("Enter a Letter to name the mesh with (A or B): ")
 # Write the modified lines back to the file
-    with open("./blockMeshDict", "w") as file:
+    with open(f"./blockMeshDict_{meshlet}", "w") as file:
         file.writelines(lines)
+    
+    print(f"Mesh blockMeshDict_{meshlet} has been generated")
 
     
 def main():

@@ -15,17 +15,23 @@ def params():
     #we will always have 64 vertices
     n = 64
     R = .5
-    H = float(input('Enter H: '))
-    
+
+    while H < (3*(R*2)): 
+        H = float(input('Enter H: '))
+        if H < 3*(R*2):
+            print('Height boundary must be 3 diameters away')
+
     while Lw < (3*(R*2)): 
         Lw = float(input('Enter Lw: ')) 
         if Lw < 3*(R*2):
-            print('Lw must be 3 diameters greater')
-    Lf= float(input('Enter Lf: ')) 
+            print('Wake boundary must be 3 diameters away')
 
+    while Lf < (3*(R*2)): 
+        Lf= float(input('Enter Lf: ')) 
+        if Lf < 3*(R*2):
+            print('Fore boundary must be 3 diameters away')
 
-    arcs = n/2
-    return n, Lf, Lw, R, H, arcs
+    return n, Lf, Lw, R, H
 
 def generate_vertices(n,R,H,Lf,Lw):
     D = R*2
@@ -195,7 +201,7 @@ def mesh_file(vertices, R):
     
 def main():
     """ Main entry vertices  """
-n, Lf, Lw, R, H, arcs = params()
+n, Lf, Lw, R, H = params()
 vertices = generate_vertices(n,R,H,Lf,Lw)
 mesh_file(vertices,R)
 

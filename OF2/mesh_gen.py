@@ -199,7 +199,7 @@ def mesh_file(vertices, R):
 # Write the modified lines back to the file
     with open(f"./blockMeshDict_{meshlet}", "w") as file:
         file.writelines(lines)
-    print("**************\n")
+    print("\n**************\n")
     print(f"Mesh blockMeshDict_{meshlet} has been generated\n")
     print("**************\n")
 

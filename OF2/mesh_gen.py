@@ -43,11 +43,11 @@ def arc_adjust(vertices):
     print(arcpoints)
 
     return arcpoints
-
+    
 def generate_vertices(n,r,H,Lf,Lw):
    #R is outer radius
     R = input("Outer Radius: ")
-
+    R = float(R)
     if R == "n":
         R = 2*r
     # Generate vertices around the circumference of inner cylinder
@@ -112,6 +112,8 @@ def generate_vertices(n,r,H,Lf,Lw):
         j +=1;
     vertices = np.concatenate((vertices, vertices), axis=0)
     vertices[32:, 2] = -vertices[32:,2]
+    
+    arc_adjust(vertices)
 
     return vertices
 

@@ -54,8 +54,8 @@ def generate_vertices(n,r,H,Lf,Lw):
                 if j ==2:
                     vertices[i, j] = -z
     outer_vertices = vertices.copy()
-    outer_vertices[:, 1] = D*np.sin(angles[:])  # Offset y coordinates by y component
-    outer_vertices[:, 0] = D*np.cos(angles[:])  # Offset x coordinates by x component
+    outer_vertices[:, 1] = R*np.sin(angles[:])  # Offset y coordinates by y component
+    outer_vertices[:, 0] = R*np.cos(angles[:])  # Offset x coordinates by x component
 
     
     vertices = np.concatenate((vertices, outer_vertices), axis=0)

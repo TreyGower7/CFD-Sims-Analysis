@@ -51,6 +51,7 @@ def generate_vertices(n,r,H,Lf,Lw):
     outer_vertices[:, 1] = R*np.sin(angles[:])  # Offset y coordinates by y component
     outer_vertices[:, 0] = R*np.cos(angles[:])  # Offset x coordinates by x component
     
+    vertices = np.concatenate((inner_vertices, outer_vertices), axis=0)
     vertices = np.concatenate((vertices, np.zeros((n//4,3))), axis=0)
     #Manually entering the first quadrant
     #point 16

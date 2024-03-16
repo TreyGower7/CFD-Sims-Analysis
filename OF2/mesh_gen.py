@@ -55,7 +55,6 @@ def generate_vertices(n,r,H,Lf,Lw):
     
     vertices = np.concatenate((inner_vertices, outer_vertices), axis=0)
     vertices = np.concatenate((vertices, np.zeros((n//4,3))), axis=0)
-    print(vertices)
     #Manually entering the first quadrant
     #point 16
     vertices[16,0] = Lw 
@@ -192,6 +191,9 @@ def mesh_file(vertices, R):
             print('enter y or n')
     while meshlet != 'A' or meshlet != 'B':
         meshlet = input("Enter a Letter to name the mesh with (A or B): ")
+        if meshlet == 'A' or meshlet == 'B':
+            break
+        
 # Write the modified lines back to the file
     with open(f"./blockMeshDict_{meshlet}", "w") as file:
         file.writelines(lines)

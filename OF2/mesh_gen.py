@@ -177,6 +177,7 @@ def mesh_file(vertices, R):
 
     #Adjust grading
     yorn = None
+    meshlet = None
     while yorn != 'y' or yorn != 'n':
         yorn = input('Would you like to change Resolution? (y/n): ')
         if yorn == 'y':
@@ -186,7 +187,8 @@ def mesh_file(vertices, R):
             break
         else: 
             print('enter y or n')
-    meshlet = input("Enter a Letter to name the mesh with (A or B): ")
+    while meshlet != 'A' or meshlet != 'B':
+        meshlet = input("Enter a Letter to name the mesh with (A or B): ")
 # Write the modified lines back to the file
     with open(f"./blockMeshDict_{meshlet}", "w") as file:
         file.writelines(lines)

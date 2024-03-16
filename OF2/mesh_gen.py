@@ -35,32 +35,23 @@ def params():
 
     return n, Lf, Lw, R, H
 
-def generate_vertices(n,R,H,Lf,Lw):
-    D = R*2
+def generate_vertices(n,r,H,Lf,Lw):
+    #R is the diameter of the inner circle?
+    R = r*2
     # Generate vertices around the circumference of inner cylinder
     #We want 8 vertices around each block so n//8
-    # Calculate angle increment
-    vertices = np.zeros((n//8,3))
-    angle_increment = 2 * np.pi / (n//8)
     z= .05
-    k=0; l =0
-    for i in range((n//8)):
-        angle = i * angle_increment
-        if i <= 8:
-            for j in range(3):
-                if j == 0:
-                    vertices[i, j] = R* np.cos(angle)
-                if j == 1:
-                    vertices[i, j] = R* np.sin(angle)
-                if j ==2:
-                    vertices[i, j] = -z
-    vertices1 = np.zeros((n//8,3))
-    for i in range(n//8): 
-        angle1 = (np.pi*2) * i / (n//8) 
-        vertices1[i,0] = np.cos(angle1)
-        vertices1[i,1] = np.sin(angle1)
-        vertices1[i,2] = -z
-    vertices = np.concatenate((vertices, vertices1), axis=0)
+
+    angles = np.linspace(0, 2*np.pi, n//8, endpoint=False)
+    x = r * np.cos(angles)
+    y = r * np.sin(angles)
+    inner_vertices = np.column_stack((x, y, z))
+
+    outer_vertices = inner_vertices.copy()
+    outer_vertices[:, 1] = R*np.sin(angles[:])  # Offset y coordinates by y component
+    outer_vertices[:, 0] = R*np.cos(angles[:])  # Offset x coordinates by x component
+    
+    vertices = np.concatenate((vertices, outer_vertices), axis=0)
     vertices = np.concatenate((vertices, np.zeros((n//4,3))), axis=0)
     #Manually entering the first quadrant
     #point 16

@@ -50,23 +50,24 @@ def arc_adjust(lines, vertices):
     patterns = ['arc 8 9 ', 'arc 9 10 ', 'arc 10 11 ', 'arc 11 12 ', 'arc 12 13 ', 'arc 13 14 ', 'arc 14 15 ', 'arc 15 8 ']
      # Collect replacements in a list
     replacements = []
-    #formatted_arc = []
+    formatted_arc = []
+    z_coords = []
+    for i, line in enumerate(lines):
+        for pattern in patterns:
+            arc_pattern = re.compile(rf'{pattern}\s*\((.*?)\)')
+            matches = arc_pattern.findall(line)
+            for match in matches:
+                x, y, z = match.split()
+                z_coords.append(z)
+                #formatted_arc.appendf" {arcpoints[j, 0]:.5e}  {arcpoints[j, 1]:.5e} {z}"
+                print(formatted_arc)
+    print(z_coords)
     for j in range(len(arcpoints)):
-        for i, line in enumerate(lines):
-            for pattern in patterns:
-                arc_pattern = re.compile(rf'{pattern}\s*\((.*?)\)')
-                matches = arc_pattern.findall(line)
-                for match in matches:
-                    x, y, z = match.split()
-                    formatted_arc = f" {arcpoints[j, 0]:.5e}  {arcpoints[j, 1]:.5e} {z}"
-                    #print(formatted_arc)
-                    replacements.append((i, match, formatted_arc))
-                    print(replacements)
-
+        formatted_arc.append(f"{arcpoints[j, 0]:.5e}  {arcpoints[j, 1]:.5e} {z_coords[j]}")
     # Replace lines outside of the loop
-    for i, match, formatted_arc in replacements:
-        lines[i] = lines[i].replace(match, formatted_arc)
-    return lines
+        for i, line in lines:
+            lines[i] = lines[i].replace(match, formatted_arc)
+        return lines
     
 def generate_vertices(n,r,H,Lf,Lw):
    #R is outer radius

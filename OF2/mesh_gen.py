@@ -55,7 +55,7 @@ def arc_adjust(lines, vertices):
         for i, line in enumerate(lines):
             for pattern in patterns:
                 arc_pattern = re.compile(rf'{pattern}\s*\((.*?)\)')
-                matches = arc_pattern.findall(line)
+                matches = arc_pattern.findall(arc_pattern, line)
                 for match in matches:
                     x, y, z = match.split()
                     formatted_arc = f" {arcpoints[j, 0]:.5e}  {arcpoints[j, 1]:.5e} {z}"

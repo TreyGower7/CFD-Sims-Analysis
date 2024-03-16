@@ -35,20 +35,37 @@ def params():
 
     return n, Lf, Lw, r, H
 
-def arc_adjust(vertices):
-
+def arc_adjust(lines, vertices):
+    #arcs = lines[94:126]
     angle = np.pi/8
     A = np.array([[np.cos(angle), -np.sin(angle)],
               [np.sin(angle), np.cos(angle)]])
     print(A)
     x= vertices[7:15,0]
-    y =vertices[7:15,1]
+    y=vertices[7:15,1]
     arcs = np.column_stack((x, y))
-    print(arcs)
     arcpoints = np.dot(arcs,A)
     print(arcpoints)
 
-    return arcpoints
+    patterns = ['arc 8 9 ', 'arc 9 10 ', 'arc 10 11 ', 'arc 11 12 ', 'arc 12 13 ', 'arc 13 14 ', 'arc 14 15 ', 'arc 15 8 ']
+    for j in range(arcpoints):
+        for i, line in enumerate(lines):
+        # Iterate over each pattern
+            for pattern in patterns:
+                # Create a regular expression pattern to match the current pattern
+                arc_pattern = re.compile(rf'{pattern}\s*\((.*?)\)')
+                
+                # Find all matches of the pattern in the line
+                matches = arc_pattern.findall(line)
+                
+                # Iterate over each match
+                for match in matches:
+                    
+                    # Extract the x, y, and z values from the match
+                    x, y, z = match.split()
+                    formatted_arc = f"{pattern} ( {arcpoints[j,0]: .5e}  {arcpoints[j,1]: .5e} {z: .5e})"
+                    lines[i] = line.replace(match, formatted_arc)
+    return lines
     
 def generate_vertices(n,r,H,Lf,Lw):
    #R is outer radius
@@ -119,8 +136,6 @@ def generate_vertices(n,r,H,Lf,Lw):
     vertices = np.concatenate((vertices, vertices), axis=0)
     vertices[32:, 2] = -vertices[32:,2]
     
-    arc_adjust(vertices)
-
     return vertices
 
 def grading(lines):
@@ -208,6 +223,10 @@ def mesh_file(vertices, R):
             break
         else: 
             print('enter y or n')
+
+    #Outer radius arc adjustment
+    lines = arc_adjust(vertices)
+
     while meshlet != 'A' or meshlet != 'B':
         meshlet = input("Enter a Letter to name the mesh with (A or B): ")
         if meshlet == 'A' or meshlet == 'B':

@@ -59,13 +59,13 @@ def arc_adjust(lines, vertices):
             for match in matches:
                 x, y, z = match.split()
                 z_coords.append(z)
-                replacements.append((i, match, formatted_arc))
+                replacements.append(i, match)
 
     print(z_coords)
     for j in range(len(arcpoints)):
-        formatted_arc = (f"{arcpoints[j, 0]:.5e}  {arcpoints[j, 1]:.5e} {z_coords[j]}")
+        formatted_arc = f"{arcpoints[j, 0]:.5e}  {arcpoints[j, 1]:.5e} {z_coords[j]}"
         # Replace lines outside of the loop
-        for i, match, formatted_arc in replacements:
+        for i, match in replacements:
             lines[i] = lines[i].replace(match, formatted_arc)
     return lines
         

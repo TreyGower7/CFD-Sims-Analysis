@@ -40,14 +40,14 @@ def generate_vertices(n,r,H,Lf,Lw):
     R = r*2
     # Generate vertices around the circumference of inner cylinder
     #We want 8 vertices around each block so n//8
-    #z= .05
+    z= .05
 
     angles = np.linspace(0, 2*np.pi, n//8, endpoint=False)
     x = r * np.cos(angles)
     y = r * np.sin(angles)
-    z = np.zeros_like(x)  # Assuming the inner cylinder is at z = 0
-    z[:] = .05
-    inner_vertices = np.column_stack((x, y, z))
+    zvec = np.zeros_like(x)  # Assuming the inner cylinder is at z = 0
+    zvec[:] = .05
+    inner_vertices = np.column_stack((x, y, zvec))
 
     outer_vertices = inner_vertices.copy()
     outer_vertices[:, 1] = R*np.sin(angles[:])  # Offset y coordinates by y component
@@ -55,6 +55,7 @@ def generate_vertices(n,r,H,Lf,Lw):
     
     vertices = np.concatenate((inner_vertices, outer_vertices), axis=0)
     vertices = np.concatenate((vertices, np.zeros((n//4,3))), axis=0)
+    print(vertices)
     #Manually entering the first quadrant
     #point 16
     vertices[16,0] = Lw 

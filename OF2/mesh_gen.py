@@ -35,10 +35,19 @@ def params():
 
     return n, Lf, Lw, r, H
 
+def arc_adjust(vertices):
+
+    A = np.array((np.cos(np.pi/8, -np.sin(np.pi/8)), np.sin(np.pi/8), np.cos(np.pi/8)))
+    print(A)
+    arcpoints = np.dot(vertices[7:15],A)
+    print(arcpoints)
+
+    return arcpoints
+
 def generate_vertices(n,r,H,Lf,Lw):
    #R is outer radius
     R = input("Outer Radius: ")
-    
+
     if R == "n":
         R = 2*r
     # Generate vertices around the circumference of inner cylinder

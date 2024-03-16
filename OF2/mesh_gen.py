@@ -50,7 +50,7 @@ def arc_adjust(lines, vertices):
     patterns = ['arc 8 9 ', 'arc 9 10 ', 'arc 10 11 ', 'arc 11 12 ', 'arc 12 13 ', 'arc 13 14 ', 'arc 14 15 ', 'arc 15 8 ']
      # Collect replacements in a list
     replacements = []
-
+    #formatted_arc = []
     for j in range(len(arcpoints)):
         for i, line in enumerate(lines):
             for pattern in patterns:
@@ -59,6 +59,7 @@ def arc_adjust(lines, vertices):
                 for match in matches:
                     x, y, z = match.split()
                     formatted_arc = f" {arcpoints[j, 0]:.5e}  {arcpoints[j, 1]:.5e} {z}"
+                    print(formatted_arc)
                     replacements.append((i, match, formatted_arc))
 
     # Replace lines outside of the loop
@@ -181,6 +182,8 @@ def grading(lines):
                 if j > 0 and 'block' in org_data[j-1]:
                     print(org_data[j-1].strip()[3:])
             lines[j] = re.sub(pat, new_values, org_data[j])
+    
+    
     return lines
 
 def mesh_file(vertices, R):

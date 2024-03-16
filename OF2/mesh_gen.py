@@ -41,7 +41,9 @@ def arc_adjust(vertices):
     A = np.array([[np.cos(angle), -np.sin(angle)],
               [np.sin(angle), np.cos(angle)]])
     print(A)
-    arcs = vertices[:,:, :2]
+    x= vertices[7:15,0]
+    y =vertices[7:15,1]
+    arcs = np.column_stack((x, y))
     print(arcs)
     arcpoints = np.dot(arcs,A)
     print(arcpoints)

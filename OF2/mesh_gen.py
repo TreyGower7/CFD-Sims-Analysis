@@ -54,8 +54,10 @@ def generate_vertices(n,r,H,Lf,Lw):
     outer_vertices[:, 0] = R*np.cos(angles[:])  # Offset x coordinates by x component
     
     vertices = np.concatenate((inner_vertices, outer_vertices), axis=0)
+    print(len(vertices))
     vertices = np.concatenate((vertices, np.zeros((n//4,3))), axis=0)
     #Manually entering the first quadrant
+    print(len(vertices))
     #point 16
     vertices[16,0] = Lw 
     vertices[16, 1] = vertices[0,1]
@@ -193,7 +195,7 @@ def mesh_file(vertices, R):
         meshlet = input("Enter a Letter to name the mesh with (A or B): ")
         if meshlet == 'A' or meshlet == 'B':
             break
-        
+
 # Write the modified lines back to the file
     with open(f"./blockMeshDict_{meshlet}", "w") as file:
         file.writelines(lines)

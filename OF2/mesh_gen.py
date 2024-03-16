@@ -48,7 +48,7 @@ def arc_adjust(lines, vertices):
     print(arcpoints)
 
     patterns = ['arc 8 9 ', 'arc 9 10 ', 'arc 10 11 ', 'arc 11 12 ', 'arc 12 13 ', 'arc 13 14 ', 'arc 14 15 ', 'arc 15 8 ']
-    for j in range(arcpoints):
+    for j in range(len(arcpoints)):
         for i, line in enumerate(lines):
         # Iterate over each pattern
             for pattern in patterns:

@@ -225,7 +225,7 @@ def mesh_file(vertices, R):
             print('enter y or n')
 
     #Outer radius arc adjustment
-    lines = arc_adjust(vertices)
+    lines = arc_adjust(lines, vertices)
 
     while meshlet != 'A' or meshlet != 'B':
         meshlet = input("Enter a Letter to name the mesh with (A or B): ")

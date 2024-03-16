@@ -40,11 +40,13 @@ def generate_vertices(n,r,H,Lf,Lw):
     R = r*2
     # Generate vertices around the circumference of inner cylinder
     #We want 8 vertices around each block so n//8
-    z= .05
+    #z= .05
 
     angles = np.linspace(0, 2*np.pi, n//8, endpoint=False)
     x = r * np.cos(angles)
     y = r * np.sin(angles)
+    z = np.zeros_like(x)  # Assuming the inner cylinder is at z = 0
+    z[:] = .05
     inner_vertices = np.column_stack((x, y, z))
 
     outer_vertices = inner_vertices.copy()

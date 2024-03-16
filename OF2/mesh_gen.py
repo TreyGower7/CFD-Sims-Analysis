@@ -37,7 +37,9 @@ def params():
 
 def arc_adjust(vertices):
 
-    A = np.array((np.cos(np.pi/8, -np.sin(np.pi/8)), np.sin(np.pi/8), np.cos(np.pi/8)))
+    angle = np.pi/8
+    A = np.array([[np.cos(angle), -np.sin(angle)],
+              [np.sin(angle), np.cos(angle)]])
     print(A)
     arcpoints = np.dot(vertices[7:15],A)
     print(arcpoints)

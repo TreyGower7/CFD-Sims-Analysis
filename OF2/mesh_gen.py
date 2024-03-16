@@ -64,7 +64,7 @@ def arc_adjust(lines, vertices):
                     
                     # Extract the x, y, and z values from the match
                     x, y, z = match.split()
-                    formatted_arc = f"{pattern} ( {arcpoints[j,0]: .5e}  {arcpoints[j,1]: .5e} {int(z): .5e})"
+                    formatted_arc = f"{pattern} ( {arcpoints[j,0]: .5e}  {arcpoints[j,1]: .5e} {z})"
                     lines[i] = line.replace(match, formatted_arc)
     return lines
     

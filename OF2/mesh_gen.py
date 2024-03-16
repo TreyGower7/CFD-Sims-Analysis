@@ -59,7 +59,7 @@ def arc_adjust(lines, vertices):
             for match in matches:
                 x, y, z = match.split()
                 z_coords.append(z)
-                replacements.append(i, match)
+                replacements.append((i, match))
 
     print(z_coords)
     for j in range(len(arcpoints)):

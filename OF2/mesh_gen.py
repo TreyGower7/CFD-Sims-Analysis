@@ -48,24 +48,22 @@ def arc_adjust(lines, vertices):
     print(arcpoints)
 
     patterns = ['arc 8 9 ', 'arc 9 10 ', 'arc 10 11 ', 'arc 11 12 ', 'arc 12 13 ', 'arc 13 14 ', 'arc 14 15 ', 'arc 15 8 ']
-    formatted_arc =''
+     # Collect replacements in a list
+    replacements = []
+
     for j in range(len(arcpoints)):
         for i, line in enumerate(lines):
-        # Iterate over each pattern
             for pattern in patterns:
-                # Create a regular expression pattern to match the current pattern
                 arc_pattern = re.compile(rf'{pattern}\s*\((.*?)\)')
-                
-                # Find all matches of the pattern in the line
                 matches = arc_pattern.findall(line)
-                
-                # Iterate over each match
                 for match in matches:
-                    
-                    # Extract the x, y, and z values from the match
                     x, y, z = match.split()
-                    formatted_arc = f"{pattern} ( {arcpoints[j,0]: .5e}  {arcpoints[j,1]: .5e} {z})"
-                    lines[i] = line.replace(match, formatted_arc)
+                    formatted_arc = f"{pattern} ( {arcpoints[j, 0]:.5e}  {arcpoints[j, 1]:.5e} {z})"
+                    replacements.append((i, match, formatted_arc))
+
+    # Replace lines outside of the loop
+    for i, match, formatted_arc in replacements:
+        lines[i] = lines[i].replace(match, formatted_arc)
     return lines
     
 def generate_vertices(n,r,H,Lf,Lw):

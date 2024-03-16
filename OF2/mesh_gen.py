@@ -36,28 +36,31 @@ def params():
     return n, Lf, Lw, R, H
 
 def generate_vertices(n,r,H,Lf,Lw):
-    #R is the diameter of the inner circle?
+    #R is the diameter of the inner circle
     R = r*2
     # Generate vertices around the circumference of inner cylinder
     #We want 8 vertices around each block so n//8
-    z= .05
-
+    # Calculate angle increment
+    vertices = np.zeros((n//8,3))
     angles = np.linspace(0, 2*np.pi, n//8, endpoint=False)
-    x = r * np.cos(angles)
-    y = r * np.sin(angles)
-    zvec = np.zeros_like(x)  # Assuming the inner cylinder is at z = 0
-    zvec[:] = .05
-    inner_vertices = np.column_stack((x, y, zvec))
+    z= .05
+    for i in range((n//8)):
+        if i <= 8:
+            for j in range(3):
+                if j == 0:
+                    vertices[i, j] = r* np.cos(angles[i])
+                if j == 1:
+                    vertices[i, j] = r* np.sin(angles[i])
+                if j ==2:
+                    vertices[i, j] = -z
+    outer_vertices = vertices.copy()
+    outer_vertices[:, 1] = D*np.sin(angles[:])  # Offset y coordinates by y component
+    outer_vertices[:, 0] = D*np.cos(angles[:])  # Offset x coordinates by x component
 
-    outer_vertices = inner_vertices.copy()
-    outer_vertices[:, 1] = R*np.sin(angles[:])  # Offset y coordinates by y component
-    outer_vertices[:, 0] = R*np.cos(angles[:])  # Offset x coordinates by x component
     
-    vertices = np.concatenate((inner_vertices, outer_vertices), axis=0)
-    print(len(vertices))
+    vertices = np.concatenate((vertices, outer_vertices), axis=0)
     vertices = np.concatenate((vertices, np.zeros((n//4,3))), axis=0)
     #Manually entering the first quadrant
-    print(len(vertices))
     #point 16
     vertices[16,0] = Lw 
     vertices[16, 1] = vertices[0,1]
@@ -181,7 +184,6 @@ def mesh_file(vertices, R):
 
     #Adjust grading
     yorn = None
-    meshlet = None
     while yorn != 'y' or yorn != 'n':
         yorn = input('Would you like to change Resolution? (y/n): ')
         if yorn == 'y':
@@ -191,11 +193,7 @@ def mesh_file(vertices, R):
             break
         else: 
             print('enter y or n')
-    while meshlet != 'A' or meshlet != 'B':
-        meshlet = input("Enter a Letter to name the mesh with (A or B): ")
-        if meshlet == 'A' or meshlet == 'B':
-            break
-
+    meshlet = input("Enter a Letter to name the mesh with (A or B): ")
 # Write the modified lines back to the file
     with open(f"./blockMeshDict_{meshlet}", "w") as file:
         file.writelines(lines)

@@ -16,28 +16,31 @@ def params():
     Lf =0
     #we will always have 64 vertices
     n = 64
-    R = .5
+    r = .5
 
-    while H < (3*(R*2)): 
+    while H < (3*(r*2)): 
         H = float(input('Enter H: '))
-        if H < 3*(R*2):
+        if H < 3*(r*2):
             print('Height boundary must be 3 diameters away')
 
-    while Lw < (3*(R*2)): 
+    while Lw < (3*(r*2)): 
         Lw = float(input('Enter Lw: ')) 
-        if Lw < 3*(R*2):
+        if Lw < 3*(r*2):
             print('Wake boundary must be 3 diameters away')
 
-    while Lf < (3*(R*2)): 
+    while Lf < (3*(r*2)): 
         Lf= float(input('Enter Lf: ')) 
-        if Lf < 3*(R*2):
+        if Lf < 3*(r*2):
             print('Fore boundary must be 3 diameters away')
 
-    return n, Lf, Lw, R, H
+    return n, Lf, Lw, r, H
 
 def generate_vertices(n,r,H,Lf,Lw):
-   #R is the diameter of the inner circle?
-    R = r*2
+   #R is outer radius
+    R = input("Outer Radius: ")
+    
+    if R == "n":
+        R = 2*r
     # Generate vertices around the circumference of inner cylinder
     #We want 8 vertices around each block so n//8
     z= .05
@@ -53,7 +56,7 @@ def generate_vertices(n,r,H,Lf,Lw):
 
     vertices = np.concatenate((inner_vertices, outer_vertices), axis=0)
     vertices = np.concatenate((vertices, np.zeros((n//4,3))), axis=0)
-    
+
     #Manually entering the first quadrant
     #point 16
     vertices[16,0] = Lw 

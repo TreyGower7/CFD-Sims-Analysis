@@ -175,7 +175,8 @@ def grading(lines):
                 
                 #Adjusting simple grading
                 if yorn == 'y':
-                    simplegrade_pattern = r'\(\s*\d+\.\d+e[+-]\d+\s+\d+\.\d+e[+-]\d+\s+\d+\.\d+\s*\)'
+                    simplegrade_pattern = r'\(\s*(\d+\.\d+e[+-]\d+)\s+(\d+\.\d+e[+-]\d+)\s+(\d+\.\d+)\s*\)'
+                    #simplegrade_pattern = r'\(\s*\d+\.\d+e[+-]\d+\s+\d+\.\d+e[+-]\d+\s+\d+\.\d+\s*\)'
                     # Search for the pattern in the line
                     match_simple = re.search(simplegrade_pattern, org_data[i+1])
                     simple_x = input('simple x grade (or type (s) to keep it the same): ')
@@ -187,7 +188,6 @@ def grading(lines):
                     if simple_y == 's':
                         simple_x = dim_simple[1]
                     print(dim_simple)
-                    print(dim_simple[0])
                     simple_newvals = f'{float(simple_x): .5e} {float(simple_y): .5e} {1.0}'
                     pat_simple = f'({dim_simple[0]} {dim_simple[1]} 1.0)'
                 

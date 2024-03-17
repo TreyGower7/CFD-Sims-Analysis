@@ -149,6 +149,7 @@ def grading(lines):
     org_data = lines
     block = ""
     new_values = ""
+    yorn = None
     while block != 'done' and block != 'd':
         block = ""
         while not block.isdigit() or int(block) >= 20:
@@ -170,10 +171,30 @@ def grading(lines):
                 print(f'Enter desired grading along x or y for block {block}')
                 x = input('x grade: ')
                 y = input('y grade: ')
+                yorn = input('would you like to change simple grading too (y/n)? ')
+                
+                #Adjusting simple grading
+                if yorn == 'y':
+                    simplegrade_pattern = r'\(\s*\d+\.\d+e[+-]\d+\s+\d+\.\d+e[+-]\d+\s+\d+\.\d+\s*\)'
+                    # Search for the pattern in the line
+                    match_simple = re.search(simplegrade_pattern, org_data[i+1])
+                    simple_x = input('simple x grade (or type (s) to keep it the same): ')
+                    simple_y = input('simple y grade (or type (s) to keep it the same): ')
+                    dim_simple = match_simple.groups()
+
+                    if simple_x == 's':
+                        simple_x = dim_simple[0]
+                    if simple_y == 's':
+                        simple_x = dim_simple[1]
+                        
+                    simple_newvals = f'{simple_x: .5e} {simple_y: .5e} {1.0}'
+                    pat_simple = f'({dim_simple[0]} {dim_simple[1]} 1.0)'
+                
                 new_values = f'{x} {y} {1}'
                 grade_pattern = r'\(\s*(\d+)\s+(\d+)\s+(\d+)\s*\)'
                 # Search for the pattern in the line
                 match = re.search(grade_pattern, org_data[i+1])
+
                 dim = match.groups()
                 pat = f'({dim[0]} {dim[1]} 1)'
                 break

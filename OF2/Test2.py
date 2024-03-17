@@ -1,54 +1,20 @@
 import re
 
-# Define the file path
+# Input string
+input_string = "arc 8 9 ( 9.23880e-01 3.82683e-01 -5.00000e-02)"
 
+# Pattern to match 'arc 8 9'
+pattern = r'arc 8 9'
 
+# Replacement values
+value1 = 333
+value2 = 333
 
-# Function to replace values in the blockMeshDict file
-def replace_values():
-    with open("/Users/treygower/Desktop/blockMeshDict1.example", "r") as file:
-            data = file.readlines()
-    print(data)
-    block = ""
-    new_values = ""
-    while block != 'done' and block != 'd':
-        block = ""
-        while not block.isdigit() or int(block) >= 20:
-            block = input("Input the block to change grading of: ")
-            if block == 'done' or block == 'd':
-                break
-
-            if not block.isdigit() or int(block) >= 20:
-                print("Invalid block number. Please enter an integer less than 20.")
-                continue
-        if block == 'done' or block == 'd':
-            break
-
-
-        #Finds Pattern for a given block
-        for i in range(len(data)):
-            if f'   // block {block}\n' == data[i]:
-                print('Current Block Data:\n' + data[i+1])
-                print(f'Enter desired grading along x or y for block {block}')
-                x = input('x grade: ')
-                y = input('y grade: ')
-                new_values = f'{x} {y} {1}'
-                grade_pattern = r'\(\s*(\d+)\s+(\d+)\s+(\d+)\s*\)'
-                # Search for the pattern in the line
-                match = re.search(grade_pattern, data[i+1])
-                dim = match.groups()
-                pat = f'({dim[0]} {dim[1]} 1)'
-                break
-        # Go through the file again and replace all matching patterns
-        for j in range(len(data)):
-            data[j] = re.sub(pat, new_values, data[j])
-
-
-            
-
-    # Write the modified content back to the file
-    with open("/Users/treygower/Desktop/blockMeshDict123_updated.txt", "w") as file:
-        file.writelines(data)
-
-# Call the function
-replace_values()
+# Perform the replacement using re.search()
+match = re.search(pattern, input_string)
+if match:
+    # Replace the matched pattern with the new values
+    output_string = input_string[:match.start()] + f'arc 8 9 ( {value1:.5e} {value2:.5e} -5.00000e-02)' + input_string[match.end():]
+    print(output_string)
+else:
+    print("Pattern 'arc 8 9' not found in the input string.")

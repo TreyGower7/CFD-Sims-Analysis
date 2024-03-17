@@ -36,16 +36,17 @@ def params():
     return n, Lf, Lw, r, H
 
 def arc_adjust(lines, vertices):
+    '''
+    Function adjusts the outer radius arcs for recirculation
+    '''
     #arcs = lines[94:126]
     angle = np.pi/8
     A = np.array([[np.cos(angle), -np.sin(angle)],
               [np.sin(angle), np.cos(angle)]])
-    print(A)
     x= vertices[7:15,0]
     y=vertices[7:15,1]
     arcs = np.column_stack((x, y))
     arcpoints = np.dot(arcs,A)
-    print(arcpoints)
 
     patterns = [r'arc 8 9 ', r'arc 9 10 ', r'arc 10 11 ', r'arc 11 12 ', r'arc 12 13 ', r'arc 13 14 ', r'arc 14 15 ', r'arc 15 8 ']
      # Collect replacements in a list
@@ -59,7 +60,6 @@ def arc_adjust(lines, vertices):
                 x, y, z = match.split()
                 z_coords.append(z)
 
-    print(z_coords)
     for j in range(len(patterns)):
         for i, line in enumerate(lines):
                 match = re.search(patterns[j], line)

@@ -207,7 +207,7 @@ def grading(lines):
                 if j > 0 and 'block' in org_data[j-1]:
                     print(org_data[j-1].strip()[3:])
             lines[j] = re.sub(pat, new_values, org_data[j])
-            lines[j] = re.sub(simplegrade_pattern, simple_newvals, org_data[j])
+            lines[j] = re.sub(pat_simple, simple_newvals, org_data[j])
     
     
     return lines

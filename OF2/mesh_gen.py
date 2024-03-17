@@ -67,8 +67,7 @@ def arc_adjust(lines, vertices):
                     # Replace the matched pattern with the new values
                     formatted_arc = f"{patterns[j]} ({arcpoints[j,0]: .5e}  {arcpoints[j, 1]: .5e} {float(z_coords[j]): .5e})"
                     lines[i] = formatted_arc + "\n"
-                    #lines[i] = re.sub(patterns[j], formatted_arc, lines[i])
-
+                    break
 
     return lines
 def generate_vertices(n,r,H,Lf,Lw):

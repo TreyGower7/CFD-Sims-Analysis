@@ -188,7 +188,7 @@ def grading(lines):
                         simple_x = dim_simple[1]
                     print(dim_simple[0])
                     print(dim_simple[1])
-                    simple_newvals = f'{float(simple_x): .5e} {float(simple_y): .5e} {1.0}'
+                    simple_newvals = f'({float(simple_x): .5e} {float(simple_y): .5e} {1.0})'
                     pat_simple = f'( {dim_simple[0]}  {dim_simple[1]} 1.0)'
                 
                 new_values = f'{x} {y} {1}'

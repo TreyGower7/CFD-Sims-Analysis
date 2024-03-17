@@ -66,7 +66,8 @@ def arc_adjust(lines, vertices):
                 if match:
                     # Replace the matched pattern with the new values
                     formatted_arc = f"{patterns[j]} ({arcpoints[j,0]: .5e}  {arcpoints[j, 1]: .5e} {float(z_coords[j]): .5e})"
-                    lines[i] = re.sub(patterns[j], formatted_arc, lines[i])
+                    lines[i] = line.rstrip() + formatted_arc + "\n"
+                    #lines[i] = re.sub(patterns[j], formatted_arc, lines[i])
 
 
     return lines

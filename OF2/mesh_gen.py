@@ -186,7 +186,7 @@ def grading(lines):
                         simple_x = dim_simple[0]
                     if simple_y == 's':
                         simple_x = dim_simple[1]
-                        
+
                     simple_newvals = f'{simple_x: .5e} {simple_y: .5e} {1.0}'
                     pat_simple = f'({dim_simple[0]} {dim_simple[1]} 1.0)'
                 
@@ -206,6 +206,7 @@ def grading(lines):
                 if j > 0 and 'block' in org_data[j-1]:
                     print(org_data[j-1].strip()[3:])
             lines[j] = re.sub(pat, new_values, org_data[j])
+            lines[j] = re.sub(pat_simple, simple_newvals, org_data[j])
     
     
     return lines

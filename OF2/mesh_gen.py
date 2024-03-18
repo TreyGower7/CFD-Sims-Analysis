@@ -83,7 +83,7 @@ def generate_vertices(n,r,H,Lf,Lw):
     x = r * np.cos(angles)
     y = r * np.sin(angles)
     zvec = np.zeros_like(x)  # Assuming the inner cylinder is at z = 0
-    zvec[:] = .05
+    zvec[:] = -.05
     inner_vertices = np.column_stack((x, y, zvec))
     outer_vertices = inner_vertices.copy()
     outer_vertices[:, 1] = R*np.sin(angles[:])  # Offset y coordinates by y component

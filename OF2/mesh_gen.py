@@ -139,7 +139,7 @@ def generate_vertices(n,r,H,Lf,Lw):
     vertices = np.concatenate((vertices, vertices), axis=0)
     vertices[32:, 2] = -vertices[32:,2]
     
-    return vertices
+    return vertices, R
 
 def grading(lines):
     """
@@ -250,9 +250,9 @@ def mesh_file(vertices, R):
             break
         else: 
             print('enter y or n')
-
+    if R != 1:
     #Outer radius arc adjustment
-    lines = arc_adjust(lines, vertices)
+        lines = arc_adjust(lines, vertices)
 
     while meshlet != 'A' or meshlet != 'B':
         meshlet = input("Enter a Letter to name the mesh with (A or B): ")
@@ -267,8 +267,8 @@ def mesh_file(vertices, R):
 
 def main():
     """ Main entry vertices  """
-n, Lf, Lw, R, H = params()
-vertices = generate_vertices(n,R,H,Lf,Lw)
+n, Lf, Lw, r, H = params()
+vertices, R = generate_vertices(n,r,H,Lf,Lw)
 mesh_file(vertices,R)
 
 if __name__ == "__main__":

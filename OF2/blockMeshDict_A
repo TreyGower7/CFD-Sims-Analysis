@@ -1,11 +1,10 @@
 
-// Mesh generated on 08-Mar-2021
-// Local directory: /Users/fbisetti/teaching/ASE347/SP-2021/OF-assignments/of2/simulations/mesh
-// Username: fbisetti
+// Mesh generated on 18-Mar-2021
+// Username: tagower
 
 
 // Lf (fore)  =  4.00000e+00
-// Lw (wake)  =  6.00000e+00
+// Lw (wake)  =  4.00000e+00
 // R  (outer) =  1.00000e+00
 // H  (top/bottom) = 4.00000
 

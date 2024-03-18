@@ -6,15 +6,11 @@
 
 
 // Lf (fore)  =  4.00000e+00
-// Lw (wake)  =  4.00000e+00
+// Lw (wake)  =  8.00000e+00
 // R  (outer) =  1.00000e+00
 // H  (top/bottom) = 4.00000
 
 
-// Lf (fore)  =  4.00000e+00
-// Lw (wake)  =  6.00000e+00
-// R  (outer) =  1.00000e+00
-// H  (top/bottom) = 4.00000
 
 FoamFile
 {

@@ -62,9 +62,9 @@ def arc_adjust(lines, vertices, R):
             matches = arc_pattern.findall(line)
             for match in matches:
                 x, y, z = match.split()
-                x_coords.append(x)
-                y_coords.append(y)
-                z_coords.append(z)
+                x_coords.append(float(x))
+                y_coords.append(float(y))
+                z_coords.append(float(z))
     midp = np.zeros((len(x),2))
 
     for i in range(len(x)):

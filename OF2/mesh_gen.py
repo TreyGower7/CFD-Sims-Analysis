@@ -241,7 +241,6 @@ def mesh_file(vertices, R):
 
     #Adjust grading
     yorn = None
-    meshlet =None
     while yorn != 'y' or yorn != 'n':
         yorn = input('Would you like to change Resolution? (y/n): ')
         if yorn == 'y':
@@ -256,10 +255,7 @@ def mesh_file(vertices, R):
         lines = arc_adjust(lines, vertices)
   
 
-    while meshlet != 'A' or meshlet != 'B':
-        meshlet = input("Enter a Letter to name the mesh with (A or B): ")
-        if meshlet == 'A' or meshlet == 'B':
-            break
+    meshlet = input("Enter a Letter to name the mesh with: ")
 # Write the modified lines back to the file
     with open(f"./blockMeshDict_{meshlet}", "w") as file:
         file.writelines(lines)

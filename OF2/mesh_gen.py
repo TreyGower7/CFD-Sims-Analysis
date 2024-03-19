@@ -7,6 +7,52 @@ Mesh generation script for cylinder
 
 __author__ = "Trey Gower, David Valenzano, Ty Zimmerman"
 
+def arc_adjust2(lines, vertices,R):
+    """
+    Adjust arc midpoints based on radius
+    """
+    arcs = lines[94:126]
+    midpoints = np.zeros((len(arcs),3))
+    heads = []
+    zpat = r'-?5\.00000e-02'
+    # Extract the z-coordinate from each match since these dont change
+    z_coords = []
+    for string in arcs:
+        match = re.search(zpat, string)
+        if match:
+            z_coords.append(float(match.group()))
+
+    for i in range(len(arcs)):
+        pattern = r'arc (\d+) (\d+)'
+        match = re.search(pattern, arcs[i])
+        if match:
+            arc = [match.group(0),int(match.group(1)),int(match.group(2))]
+            heads.append(arc[0])
+            chord_mid = ((vertices[arc[2]][0]+ vertices[arc[1]][0])/2, 
+                        (vertices[arc[2]][1]+ vertices[arc[1]][1])/2)
+            direction_vector = (((vertices[arc[2]][0] - vertices[arc[1]][0])/2), 
+                                (vertices[arc[2]][1] - vertices[arc[1]][1])/2)
+
+            # Magnitude of direction vector
+            direction_vector_len = np.sqrt(direction_vector[0] ** 2 + direction_vector[1] ** 2)
+
+            # Normalize the direction vector
+            normalized_vec = (direction_vector[0] / direction_vector_len, 
+                            direction_vector[1] / direction_vector_len)
+
+            # Calculate the midpoint of the arc
+            arc_midpoint = (chord_mid[0] + normalized_vec[0] * R, 
+                            chord_mid[1] + normalized_vec[1] * R)
+            midpoints[i][0] = arc_midpoint[0]
+            midpoints[i][1] = arc_midpoint[1]
+            midpoints[i][2] = 0.05
+    #Formating
+    formatted_arcs = ''
+    for row in range(len(midpoints)):
+        formatted_arc = f"{heads[row]} ( {midpoints[row][0]: .5e}  {midpoints[row][1]: .5e} {z_coords[row]: .5e})\n"
+        formatted_arcs += formatted_arc    
+    return formatted_arcs
+
 def params():
     """ 
     enter paramters for cylinder
@@ -252,7 +298,13 @@ def mesh_file(vertices, R):
             print('enter y or n')
     if R != 1:
     #Outer radius arc adjustment
-        lines = arc_adjust(lines, vertices)
+        lines2 = arc_adjust2(lines, vertices, R)
+    #inserts formatted string of vertices
+    for i, line in enumerate(lines):
+        if contents_to_modify['edge_template'] in line:
+            for j, line in enumerate(lines2):
+                lines[i+j] = lines2[j]
+            break
 
     while meshlet != 'A' or meshlet != 'B':
         meshlet = input("Enter a Letter to name the mesh with (A or B): ")

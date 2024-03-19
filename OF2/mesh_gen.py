@@ -36,9 +36,10 @@ def params():
 
     return n, Lf, Lw, r, H
 
-def arc_adjust(lines, vertices):
+def arc_adjust(lines, vertices, R):
     '''
     Function adjusts the outer radius arcs for recirculation
+    '''
     '''
     #arcs = lines[94:126]
     angle = np.pi/8
@@ -48,27 +49,50 @@ def arc_adjust(lines, vertices):
     y=vertices[7:15,1]
     arcs = np.column_stack((x, y))
     arcpoints = np.dot(arcs,A)
-
+    '''
     patterns = [r'arc 8 9 ', r'arc 9 10 ', r'arc 10 11 ', r'arc 11 12 ', r'arc 12 13 ', r'arc 13 14 ', r'arc 14 15 ', r'arc 15 8 ']
      # Collect replacements in a list
     formatted_arc = ''
     z_coords = []
+    x_coords = []
+    y_coords = []
     for i, line in enumerate(lines):
         for pattern in patterns:
             arc_pattern = re.compile(rf'{pattern}\s*\((.*?)\)')
             matches = arc_pattern.findall(line)
             for match in matches:
                 x, y, z = match.split()
+                x_coords.append(x)
+                y_coords.append(y)
                 z_coords.append(z)
+    midp = np.zeros((len(x),2))
 
+    for i in range(len(x)):
+        chord_mid = ((x_coords[i+1]+ x_coords[i])/2, (y_coords[i+1]+ y_coords[i])/2)
+
+        direction_vector = (((x_coords[i+1] - x_coords[i])/2), 
+                            (y_coords[i+1] - y_coords[i])/2)
+
+        # Magnitude of direction vector
+        direction_vector_len = np.sqrt(direction_vector[0] ** 2 + direction_vector[1] ** 2)
+
+        # Normalize the direction vector
+        normalized_vec = (direction_vector[0] / direction_vector_len, 
+                        direction_vector[1] / direction_vector_len)
+
+        # Calculate the midpoint of the arc
+        arc_midpoint = (chord_mid[0] + normalized_vec[0] * R, 
+                        chord_mid[1] + normalized_vec[1] * R)
+        midp[i][0] = arc_midpoint[0]
+        midp[i][1] = arc_midpoint[1]
     for j in range(len(patterns)):
         for i, line in enumerate(lines):
                 match = re.search(patterns[j], line)
                 if match:
-                    print(arcpoints[j,0])
-                    print(arcpoints[j,1])
+                    print(midp[j,0])
+                    print(midp[j,1])
                     # Replace the matched pattern with the new values
-                    formatted_arc = f"{patterns[j]}({arcpoints[j,0]: .5e} {arcpoints[j, 1]: .5e} {float(z_coords[j]): .5e})"
+                    formatted_arc = f"{patterns[j]}({midp[j,0]: .5e} {midp[j, 1]: .5e} {float(z_coords[j]): .5e})"
                     lines[i] = formatted_arc + "\n"
                     break
 
@@ -254,7 +278,7 @@ def mesh_file(vertices, R):
             print('enter y or n')
     if R != 1:
     #Outer radius arc adjustment
-        lines = arc_adjust(lines, vertices)
+        lines = arc_adjust(lines, vertices,R)
   
 
     meshlet = input("Enter a Letter to name the mesh with: ")

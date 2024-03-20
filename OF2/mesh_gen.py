@@ -265,12 +265,14 @@ def mesh_file(vertices, R):
         else: 
             print('enter y or n')
     #Outer radius arc adjustment
+    '''
     formatted_arc = arc_adjust(R)
     for i, line in enumerate(lines):
         if contents_to_modify['edge_template'] in line:
             lines[i] = formatted_arc
             break
-
+    '''
+    
     meshlet = input("Enter a Letter to name the mesh with: ")
 # Write the modified lines back to the file
     with open(f"./blockMeshDict_{meshlet}", "w") as file:

@@ -65,7 +65,6 @@ def arc_adjust(lines, vertices, R):
                 x_coords.append(float(x))
                 y_coords.append(float(y))
                 z_coords.append(float(z))
-                print(x_coords)
 
     arc_points = np.zeros((8, 2))
     theta = 22.5
@@ -77,13 +76,12 @@ def arc_adjust(lines, vertices, R):
         theta += 45
     
     print(arc_points)
-
     for j in range(len(patterns)):
         for i, line in enumerate(lines):
                 match = re.search(patterns[j], line)
                 if match:
                     # Replace the matched pattern with the new values
-                    formatted_arc = f"{patterns[j]}({midp[j,0]: .5e} {midp[j, 1]: .5e} {float(z_coords[j]): .5e})"
+                    formatted_arc = f"{patterns[j]}({arc_points[j,0]: .5e} {arc_points[j, 1]: .5e} {float(z_coords[j]): .5e})"
                     lines[i] = formatted_arc + "\n"
                     break
 

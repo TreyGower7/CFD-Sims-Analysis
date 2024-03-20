@@ -36,56 +36,55 @@ def params():
 
     return n, Lf, Lw, r, H
 
-def arc_adjust(lines, vertices, R):
-    '''
-    Function adjusts the outer radius arcs for recirculation
-    '''
-    '''
-    #arcs = lines[94:126]
-    angle = np.pi/8
-    A = np.array([[np.cos(angle), -np.sin(angle)],
-              [np.sin(angle), np.cos(angle)]])
-    x= vertices[7:15,0]
-    y=vertices[7:15,1]
-    arcs = np.column_stack((x, y))
-    arcpoints = np.dot(arcs,A)
-    '''
-    patterns = [r'arc 8 9 ', r'arc 9 10 ', r'arc 10 11 ', r'arc 11 12 ', r'arc 12 13 ', r'arc 13 14 ', r'arc 14 15 ', r'arc 15 8 ']
-     # Collect replacements in a list
-    formatted_arc = ''
-    z_coords = []
-    x_coords = []
-    y_coords = []
-    for i, line in enumerate(lines):
-        for pattern in patterns:
-            arc_pattern = re.compile(rf'{pattern}\s*\((.*?)\)')
-            matches = arc_pattern.findall(line)
-            for match in matches:
-                x, y, z = match.split()
-                x_coords.append(float(x))
-                y_coords.append(float(y))
-                z_coords.append(float(z))
-
+def arc_adjust(R):
+    """
+    Adjust arc midpoints based on radius
+    """
+    r = .5
+    #Assemble inner radius r
     arc_points = np.zeros((8, 2))
     theta = 22.5
     for i in range(8):
-        arc_x = R * np.cos(np.deg2rad(theta))
-        arc_y = R * np.sin(np.deg2rad(theta))
+        arc_x = r * np.cos(np.deg2rad(theta))
+        arc_y = r * np.sin(np.deg2rad(theta))
 
         arc_points[i, :] = [arc_x, arc_y]
         theta += 45
-    
-    print(arc_points)
-    for j in range(len(patterns)):
-        for i, line in enumerate(lines):
-                match = re.search(patterns[j], line)
-                if match:
-                    # Replace the matched pattern with the new values
-                    formatted_arc = f"{patterns[j]}({arc_points[j,0]: .5e} {arc_points[j, 1]: .5e} {float(z_coords[j]): .5e})"
-                    lines[i] = formatted_arc + "\n"
-                    break
 
-    return lines
+    #Assemble outer radius R
+    arc_pointsR = np.zeros((8, 2))
+    theta = 22.5
+    for i in range(8):
+        arc_xR = R * np.cos(np.deg2rad(theta))
+        arc_yR = R * np.sin(np.deg2rad(theta))
+
+        arc_pointsR[i, :] = [arc_xR, arc_yR]
+        theta += 45
+    
+    zvec = np.zeros((16,1))
+    zvec[:]= -.005
+    arc_points = np.vstack((arc_points,arc_pointsR))
+    arc_points = np.column_stack((arc_points,zvec))
+    arc_points = np.vstack((arc_points,arc_points))
+    arc_points[16:,2] = .005
+
+    circle_label = np.arange(8)
+    circle_label = np.vstack((circle_label,np.arange(8,16)))
+    circle_label = np.vstack((circle_label,np.arange(32,40)))
+    circle_label = np.vstack((circle_label,np.arange(40,48)))
+
+    #Formating
+    formatted_arcs = ''
+    for row in range(len(arc_points[:, 0])):
+        if row % 8 != 7:
+            formatted_arc = f"arc {circle_label[row // 8][row % 8]} {circle_label[row // 8][row % 8 + 1]} ({arc_points[row][0]: .5e}  {arc_points[row][1]: .5e} {arc_points[row][2]: .5e})\n"
+            formatted_arcs += formatted_arc
+        else:
+            formatted_arc = f"arc {circle_label[row // 8][7]} {circle_label[row // 8][0]} ({arc_points[row][0]: .5e}  {arc_points[row][1]: .5e} {arc_points[row][2]: .5e})\n"
+            formatted_arcs += formatted_arc
+               
+    return formatted_arcs
+
 def generate_vertices(n,r,H,Lf,Lw):
    #R is outer radius
     R = input("Outer Radius: ")
@@ -265,10 +264,12 @@ def mesh_file(vertices, R):
             break
         else: 
             print('enter y or n')
-    #if R != 1:
     #Outer radius arc adjustment
-    lines = arc_adjust(lines, vertices,R)
-  
+    formatted_arc = arc_adjust(R)
+    for i, line in enumerate(lines):
+        if contents_to_modify['edge_template'] in line:
+            lines[i] = formatted_arc
+            break
 
     meshlet = input("Enter a Letter to name the mesh with: ")
 # Write the modified lines back to the file

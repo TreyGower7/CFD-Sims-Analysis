@@ -66,36 +66,22 @@ def arc_adjust(lines, vertices, R):
                 y_coords.append(float(y))
                 z_coords.append(float(z))
                 print(x_coords)
-    midp = np.zeros((len(x),2))
-    #for point 15-8
-    x_coords.append(x[0])
-    y_coords.append(y[0])
 
+    arc_points = np.zeros((8, 2))
+    theta = 22.5
+    for i in range(8):
+        arc_x = R * np.cos(np.deg2rad(theta))
+        arc_y = R * np.sin(np.deg2rad(theta))
 
-    for i in range(len(x)-1):
-        chord_mid = ((x_coords[i+1]+ x_coords[i])/2, (y_coords[i+1]+ y_coords[i])/2)
+        arc_points[i, :] = [arc_x, arc_y]
+        theta += 45
+    
+    print(arc_points)
 
-        direction_vector = (((x_coords[i+1] - x_coords[i])/2), 
-                            (y_coords[i+1] - y_coords[i])/2)
-
-        # Magnitude of direction vector
-        direction_vector_len = np.sqrt(direction_vector[0] ** 2 + direction_vector[1] ** 2)
-
-        # Normalize the direction vector
-        normalized_vec = (direction_vector[0] / direction_vector_len, 
-                        direction_vector[1] / direction_vector_len)
-
-        # Calculate the midpoint of the arc
-        arc_midpoint = (chord_mid[0] + normalized_vec[0] * R, 
-                        chord_mid[1] + normalized_vec[1] * R)
-        midp[i][0] = arc_midpoint[0]
-        midp[i][1] = arc_midpoint[1]
     for j in range(len(patterns)):
         for i, line in enumerate(lines):
                 match = re.search(patterns[j], line)
                 if match:
-                    print(midp[j,0])
-                    print(midp[j,1])
                     # Replace the matched pattern with the new values
                     formatted_arc = f"{patterns[j]}({midp[j,0]: .5e} {midp[j, 1]: .5e} {float(z_coords[j]): .5e})"
                     lines[i] = formatted_arc + "\n"

@@ -65,12 +65,12 @@ def arc_adjust(lines, vertices, R):
                 x_coords.append(float(x))
                 y_coords.append(float(y))
                 z_coords.append(float(z))
+                print(x_coords)
     midp = np.zeros((len(x),2))
     #for point 15-8
-    x_coords.append(float(x[0]))
-    y_coords.append(float(y[0]))
-    x_coords = float(x_coords)
-    y_coords = float(y_coords)
+    x_coords.append(x[0])
+    y_coords.append(y[0])
+
 
     for i in range(len(x)-1):
         chord_mid = ((x_coords[i+1]+ x_coords[i])/2, (y_coords[i+1]+ y_coords[i])/2)

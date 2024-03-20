@@ -27,8 +27,10 @@ def get_data():
     v1 = [] 
     p0 = []
     p1 = []
-    url = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/OF2/probes110part6/0/U"
-    url2 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/OF2/probes110part6/0/p"
+    tp = []
+
+    url = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/OF2/probespart6/0/U"
+    url2 = "https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/OF2/probespart6/0/p"
 
     response = requests.get(url)
     response2 = requests.get(url2)
@@ -38,46 +40,74 @@ def get_data():
     else:
         print("Failed to retrieve content. Status code:", response.status_code)
     pat = r'(\d+\.\d+)\s+\(([-+]?\d+\.\d+(?:[eE][-+]?\d+)?)\s+([-+]?\d+\.\d+(?:[eE][-+]?\d+)?)\s+([-+]?\d+\.\d+(?:[eE][-+]?\d+)?)\)\s+\(([-+]?\d+\.\d+(?:[eE][-+]?\d+)?)\s+([-+]?\d+\.\d+(?:[eE][-+]?\d+)?)\s+([-+]?\d+\.\d+(?:[eE][-+]?\d+)?)\)'
+    pat2 = r'(\S+)\s+(\S+)\s+(\S+)'
 # Print the first few lines as an example
     for i, line in enumerate(lines[4:]):
         match = re.search(pat,line)
         if match:
             dim = match.groups()
-            #print(dim[0])
             t.append(float(dim[0]))
             u0.append(float(dim[1]))
             v0.append(float(dim[2]))
             u1.append(float(dim[4]))
             v1.append(float(dim[5]))
-        if i > 4:
-            p0.append(float(lines2[i][15:27].strip()))
-            p1.append(float(lines2[i][30:-1].strip()))
-    return t,u0,v0,u1,v1,p0,p1
+
+    for i, line in enumerate(lines2[4:]):
+        match = re.search(pat2,line)
+        if match:
+            dim = match.groups()
+            p0.append(float(dim[1]))
+            p1.append(float(dim[2]))
+            tp.append(float(dim[0]))
+ 
+    return t,u0,v0,u1,v1,p0,p1,tp
 
 
-def plot(t,u0,v0,u1,v1,p0,p1):
+def plot(t,u0,v0,u1,v1,p0,p1,tp):
     
-    f_u = u0[::800]
-    f_t = t[::800]
-    print(len(f_u))
-    print(len(f_t))
-    plt.plot(f_t,f_u, '-r',label=u0)
+   
+    plt.figure(1)
+    plt.plot(t,u0, '-r',label='Probe 1')
+    plt.plot(t,u1, '-b',label='Probe 2')
+
     plt.legend(loc='upper left')  # Specify loc directly as a keyword argument
-    plt.title('v vs y refined, RE=10')
-    plt.xlabel('y')
-    plt.ylabel('v')
+    plt.xlabel('t')
+    plt.ylabel('u/U')
     plt.grid()
-    plt.gcf().set_size_inches(8, 6)  # Set width and height in inches as required
 
     plt.show()
+
+    plt.figure(2)
+    plt.plot(t,v0, '-r',label='Probe 1')
+    plt.plot(t,v1, '-b',label='Probe 2')
+
+    plt.legend(loc='upper left')  # Specify loc directly as a keyword argument
+    plt.xlabel('t')
+    plt.ylabel('u/U')
+    plt.grid()
+
+    plt.show()
+
+    plt.figure(3)
+    plt.plot(tp,p0, '-r',label='Probe 1')
+    plt.plot(tp,p1, '-b',label='Probe 2')
+
+    plt.legend(loc='upper left')  # Specify loc directly as a keyword argument
+    plt.xlabel('t')
+    plt.ylabel('p/U')
+    plt.grid()
+    plt.xlim([0,100])
+    plt.show()
+
+
 
 
 
 def main():
     """ Main entry point of the app """
-    t,u0,v0,u1,v1,p0,p1 = get_data()
-    plot(t,u0,v0,u1,v1,p0,p1)
-
+    t,u0,v0,u1,v1,p0,p1,tp= get_data()
+   
+    plot(t,u0,v0,u1,v1,p0,p1,tp)
 if __name__ == "__main__":
     """ This is executed when run from the command line """
     main()

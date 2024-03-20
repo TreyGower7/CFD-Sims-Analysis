@@ -267,9 +267,9 @@ def mesh_file(vertices, R):
             break
         else: 
             print('enter y or n')
-    if R != 1:
+    #if R != 1:
     #Outer radius arc adjustment
-        lines = arc_adjust(lines, vertices,R)
+    lines = arc_adjust(lines, vertices,R)
   
 
     meshlet = input("Enter a Letter to name the mesh with: ")

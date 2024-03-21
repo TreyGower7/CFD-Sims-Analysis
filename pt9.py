@@ -92,6 +92,19 @@ def convertrt(u1,v1,u2,v2,u3,v3):
         
     return vr1,vr2,vr3,vt1,vt2,vt3
 
+def plotrt(vr1,vr2,vr3,vt1,vt2,vt3):
+    r = np.linspace(0,3,len(vt3))
+    plt.figure(1)
+    plt.plot(r,vt3, '-r',label='Probe 1')
+    #plt.plot(t,u1, '-b',label='Probe 2')
+    
+    plt.legend(loc='upper left')  # Specify loc directly as a keyword argument
+    plt.xlabel('t')
+    plt.ylabel('u/U')
+    plt.grid()
+
+    plt.show()
+
 def vel_bound():
     """ {Main Description here}
      
@@ -122,7 +135,7 @@ def main():
     u1,v1,u2,v2,u3,v3 =  get_U()
 
     vr1,vr2,vr3,vt1,vt2,vt3 = convertrt(u1,v1,u2,v2,u3,v3)
-
+    plotrt(vr1,vr2,vr3,vt1,vt2,vt3)
     
 if __name__ == "__main__":
     """ This is executed when run from the command line """

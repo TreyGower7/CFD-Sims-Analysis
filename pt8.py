@@ -14,7 +14,7 @@ def get_U():
     u1 = []
     t = []
 
-    mesh = 'B4'
+    mesh = 'B1'
     line1 = f'https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/OF2/mesh{mesh}/U'
     response = requests.get(line1)
     if response.status_code == 200:
@@ -45,6 +45,7 @@ def fast_fourier(u0,u1,t):
     yf2 = fft(y2)
     xf = fftfreq(N, T)[:N//2]
     xf2 = fftfreq(N, T)[:N//2]
+    
     plt.plot(xf, 1.0/N * np.abs(yf[0:N//2]), label = 'Probe 1', color='r')
     plt.plot(xf2, 1.0/N * np.abs(yf2[0:N//2]), label = 'Probe 2', color ='b')
     plt.ylabel('Amplitude')
@@ -53,17 +54,37 @@ def fast_fourier(u0,u1,t):
     plt.grid()
     plt.xlim([.06, 1])  # Adjusted x-axis limits
     plt.ylim([0, .2])
+
+    freq_range=(0.06, 1)
+
+    # Find indices where amplitude is maximum
+    max_indices = np.where((xf >= freq_range[0]) & (xf <= freq_range[1]))[0]
+    max_freqs = xf[max_indices]
+    max_amplitudes_probe1 = 1.0 / N * np.abs(yf[max_indices])
+    max_amplitudes_probe2 = 1.0 / N * np.abs(yf2[max_indices])
+
+    # Find maximum amplitude and corresponding frequency for each probe
+    max_freq_probe1 = max_freqs[np.argmax(max_amplitudes_probe1)]
+    max_freq_probe2 = max_freqs[np.argmax(max_amplitudes_probe2)]
+
+    annotate_max_freq(max_freq_probe1, 0.1, 'Max Freq: {:.2f} Hz'.format(max_freq_probe1), color='r')
+    #annotate_max_freq(max_freq_probe2, 0.1, 'Max Freq: {:.2f} Hz'.format(max_freq_probe2), color='b')
+
     plt.show()
+
+
     
 
 # example y = fft(x)
  
-    return 0
-
+def annotate_max_freq(x, y, text, color):
+    plt.annotate(text, xy=(x, y), xytext=(x, y + 0.02),
+                 arrowprops=dict(facecolor=color, shrink=0.05),
+                 horizontalalignment='center', verticalalignment='bottom', color=color)
 def main():
     #Getting oscillitory u vels and time steps
     u0,u1,t =  get_U()
-    fast_fourier(u0,u1,t)
+    print(fast_fourier(u0,u1,t))
 if __name__ == "__main__":
     """ This is executed when run from the command line """
     main()

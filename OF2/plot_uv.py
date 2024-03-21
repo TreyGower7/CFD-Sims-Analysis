@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 import requests 
 from matplotlib.cm import get_cmap
 import re
-from PIL import Image
 
 """
 plotting u vs v for x =.5 and y = [0:1]
@@ -83,7 +82,7 @@ def plot(t,u0,v0,u1,v1,p0,p1,tp):
 
     plt.legend(loc='upper left')  # Specify loc directly as a keyword argument
     plt.xlabel('t')
-    plt.ylabel('u/U')
+    plt.ylabel('v/U')
     plt.grid()
 
     plt.show()

@@ -14,7 +14,7 @@ def get_U():
     u1 = []
     t = []
 
-    mesh = 'B1'
+    mesh = 'B4'
     line1 = f'https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/OF2/mesh{mesh}/U'
     response = requests.get(line1)
     if response.status_code == 200:
@@ -71,6 +71,8 @@ def fast_fourier(u0,u1,t):
     #annotate_max_freq(max_freq_probe2, 0.1, 'Max Freq: {:.2f} Hz'.format(max_freq_probe2), color='b')
 
     plt.show()
+
+    return max_freq_probe1
 
 
     

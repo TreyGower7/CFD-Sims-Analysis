@@ -113,35 +113,26 @@ def convertrt(u1,v1,u2,v2,u3,v3,x1,y1,x2,y2,x3,y3):
     return vr1,vr2,vr3,vt1,vt2,vt3,r1,r2,r3
 
 def plotrt(vr1,vr2,vr3,vt1,vt2,vt3,r1,r2,r3):
-    cmap = plt.get_cmap('gist_rainbow')
-
+    
     plt.figure(1)
-    for i in range(len(vr2)):
-        plt.plot(r1[i],vr1[i], color = cmap(i/(len(vr2))))
-        plt.plot(r2[i],vr2[i], color = cmap(i/(len(vr2))))
-        plt.plot(r3[i],vr3[i],label=f'A{i+1}', color = cmap(i/(len(vr2))))
+    plt.plot(r1,vr1, '-b',label='pi/4')
+    plt.plot(r2,vr2, '-r',label='pi/2')
+    plt.plot(r3,-vr3, '-g',label='3pi/4')
     
     plt.legend(loc='upper left')  # Specify loc directly as a keyword argument
     plt.xlabel('r')
     plt.ylabel('Ur')
     plt.grid()
-    plt.title(r'top line = $\frac{\pi}{2}$, mid line = $\frac{\pi}{4}$, bottom line = $\frac{3*\pi}{4}$')
 
     plt.show()
     plt.figure(2)
-    for i in range(len(vt2)):
-
-        plt.plot(r1[i],-vt1[i],color = cmap(i/(len(vt2))))
-        plt.plot(r2[i],-vt2[i],color = cmap(i/(len(vt2))))
-        plt.plot(r3[i],vt3[i],label=f'A{i+1}',color = cmap(i/(len(vt2))))
-      
+    plt.plot(r1,-vt1, '-b',label='pi/4')
+    plt.plot(r2,-vt2, '-r',label='pi/2')
+    plt.plot(r3,-vt3, '--g',label='3pi/4')
     plt.legend(loc='upper left')  # Specify loc directly as a keyword argument
     plt.xlabel('r')
     plt.ylabel(r'$U_{\theta}$')
     plt.grid()
-    plt.title(r'top line = $\frac{\pi}{2}$, mid line = $\frac{\pi}{4}$, bottom line = $\frac{3*\pi}{4}$')
-    plt.show()
-
 
 def plot2(delta,utp,urp):
     A1r = [.055, .493, -.226]
@@ -169,22 +160,22 @@ def plot2(delta,utp,urp):
     plt.grid()
     
     plt.figure(1)
-    plt.plot(delta[:,0],Api4r, '-b',label='pi/4')
-    plt.plot(delta[:,1],Api2r, '-r',label='pi/2')
-    plt.plot(delta[:,2],A3pi4r, '-g',label='3pi/4')
+    plt.plot(1/delta[:,0],Api4r, '-b',label='pi/4')
+    plt.plot(1/delta[:,1],Api2r, '-r',label='pi/2')
+    plt.plot(1/delta[:,2],A3pi4r, '-g',label='3pi/4')
     
     plt.legend()  # Specify loc directly as a keyword argument
-    plt.xlabel(r'$\delta$')
+    plt.xlabel(r'$\frac{1}{\delta}$')
     plt.ylabel(r'$e_{r\theta}$')
     plt.grid()
 
     plt.figure(2)
-    plt.plot(delta[:,0],urp[:,0], '-b',label='pi/4')
-    plt.plot(delta[:,1],urp[:,1], '-r',label='pi/2')
-    plt.plot(delta[:,2],urp[:,2], '-g',label='3pi/4')
+    plt.plot(1/delta[:,0],urp[:,0], '-b',label='pi/4')
+    plt.plot(1/delta[:,1],urp[:,1], '-r',label='pi/2')
+    plt.plot(1/delta[:,2],urp[:,2], '-g',label='3pi/4')
     
     plt.legend()  # Specify loc directly as a keyword argument
-    plt.xlabel(r'$\delta$')
+    plt.xlabel(r'$\frac{1}{\delta}$')
     plt.ylabel(r'$e_{rr}$')
     plt.grid()
 
@@ -238,36 +229,20 @@ def main():
     deltav = np.zeros((3,3))
     utpv = np.zeros((3,3))
     urpv = np.zeros((3,3))
-    meshes = ['A1', 'A2', 'A3','A4','A5','A6','A7']  
-    vr1v = []
-    vr2v = []
-    vr3v = []
-    vt1v = []
-    vt2v = []
-    vt3v = []
-    r1v = []
-    r2v = []
-    r3v = []
-
+    meshes = ['A1', 'A2', 'A3']  
     for i in range(len(meshes)):
         u1, v1, u2, v2, u3, v3, x1, y1, x2, y2, x3, y3 = get_U(meshes[i])
 
         vr1,vr2,vr3,vt1,vt2,vt3,r1,r2,r3 = convertrt(u1,v1,u2,v2,u3,v3,x1,y1,x2,y2,x3,y3)
-        
-        vr1v.append(vr1)
-        vr2v.append(vr2)
-        vr3v.append(vr3)
-        vt1v.append(vt1)
-        vt2v.append(vt2)
-        vt3v.append(vt3)
-        r1v.append(r1)
-        r2v.append(r2)
-        r3v.append(r3)
+        #plotrt(vr1,vr2,vr3,vt1,vt2,vt3,r1,r2,r3)
 
-
-       
-    plotrt(vr1v,vr2v,vr3v,vt1v,vt2v,vt3v,r1v,r2v,r3v)
-    #plot2(deltav, utpv, urpv)
+        delta,utp,urp = rate_of_strain(vr1,vr2,vr3,vt1,vt2,vt3,x1,y1,x2,y2,x3,y3,r1,r2,r3)
+        for k in range(len(meshes)):
+            deltav[i,k] = delta[k]
+            utpv[i,k] = utp[k]
+            urpv[i,k] = urp[k]
+    print(deltav)
+    plot2(deltav, utpv, urpv)
 if __name__ == "__main__":
     """ This is executed when run from the command line """
     main()

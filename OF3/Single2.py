@@ -27,65 +27,69 @@ steptop = (st1, st2,st3,st4)
 
 names = ('Bottom', 'Top', 'Step Top', 'Step Front')
 # Assign column names to the DataFrame for clarity
-stepf = []
+stepf = []  # Create an empty list to store filtered DataFrames
+
 for i in range(len(mesh)):
     bottom[i].columns = ['X', 'Y', 'Z', 'p', 'T']
     top[i].columns = ['X', 'Y', 'Z', 'p', 'T']
     steptop[i].columns = ['X', 'Y', 'Z', 'p', 'T']
     stepfront[i].columns = ['X', 'Y', 'Z', 'p', 'T']
 
-# Filter rows where 'Y' >= 0.2
-# Filter rows where 'Y' is less than or equal to 0.2
-    filtered = stepfront[i][stepfront[i]['Y'] <= 0.2]
-    stepf.append(filtered)
+    # Filter rows where 'Y' <= 0.2 in each stepfront DataFrame
+    filtered_stepfront = stepfront[i][stepfront[i]['Y'] <= 0.2]
+
+    # Append the filtered DataFrame to the stepf list
+    stepf.append(filtered_stepfront)
 
 # Plotting
-plt.figure()
-for i in range(3):  # changed range to 4 to iterate over all datasets
-    plt.subplot(2,2,i)
-    # Plot the data
-    plt.plot(bottom[i]['X'], bottom[i]['p'])  # corrected accessing the DataFrame
-    plt.xlabel('X')
-    plt.ylabel('Pressure (p)')
-    plt.title(names[i])  # Adding titles
-    plt.grid(True)
-    plt.show()
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+for i in range(len(mesh)):
+    row_index = i // 2
+    col_index = i % 2
+    ax = axes[row_index, col_index]
+    ax.plot(bottom[i]['X'], bottom[i]['p'])
+    ax.set_xlabel('X')
+    ax.set_ylabel('Pressure (p)')
+    ax.set_title(names[0])
 
-plt.title(names[0])  # Adding titles
+plt.tight_layout()
 plt.show()
 
-plt.figure()
-for i in range(3):  # changed range to 4 to iterate over all datasets
-    plt.subplot(2,2,i)
-    # Plot the data
-    plt.plot(top[i]['X'], top[i]['p'])  # corrected accessing the DataFrame
-    plt.xlabel('X')
-    plt.ylabel('Pressure (p)')
-    plt.grid(True)
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+for i in range(len(mesh)):
+    row_index = i // 2
+    col_index = i % 2
+    ax = axes[row_index, col_index]
+    ax.plot(top[i]['X'], top[i]['p'])
+    ax.set_xlabel('X')
+    ax.set_ylabel('Pressure (p)')
+    ax.set_title(names[1])
 
-plt.title(names[1])  # Adding titles
+plt.tight_layout()
 plt.show()
 
-plt.figure()
-for i in range(3):  # changed range to 4 to iterate over all datasets
-    plt.subplot(2,2,i)
-    # Plot the data
-    plt.plot(steptop[i]['X'], steptop[i]['p'])  # corrected accessing the DataFrame
-    plt.xlabel('X')
-    plt.ylabel('Pressure (p)')
-    plt.grid(True)
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+for i in range(len(mesh)):
+    row_index = i // 2
+    col_index = i % 2
+    ax = axes[row_index, col_index]
+    ax.plot(steptop[i]['X'], steptop[i]['p'])
+    ax.set_xlabel('X')
+    ax.set_ylabel('Pressure (p)')
+    ax.set_title(names[2])
 
-plt.title(names[2])  # Adding titles
+plt.tight_layout()
 plt.show()
 
-plt.figure()
-for i in range(3):  # changed range to 4 to iterate over all datasets
-    plt.subplot(2,2,i)
-    # Plot the data
-    plt.plot(stepfront[-1]['Y'], stepfront[-1]['p'])  # corrected accessing the DataFrame
-    plt.xlabel('Y')
-    plt.ylabel('Pressure (p)')
-    plt.grid(True)
+fig, axes = plt.subplots(2, 2, figsize=(12, 10))
+for i in range(len(mesh)):
+    row_index = i // 2
+    col_index = i % 2
+    ax = axes[row_index, col_index]
+    ax.plot(stepf[i]['Y'], stepf[i]['p'])  # Use stepf for plotting
+    ax.set_xlabel('Y')
+    ax.set_ylabel('Pressure (p)')
+    ax.set_title(names[3])
 
-plt.title(names[3])  # Adding titles
+plt.tight_layout()
 plt.show()

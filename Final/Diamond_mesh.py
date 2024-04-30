@@ -14,14 +14,14 @@ def params():
     enter paramters 
     """
     Lf = 2
-    Lw = 0
-    H =0
+    Lw = 6
+    H = 5
     alpha_d =0
     #we will always have 32 vertices
     n = 32
 
-    H = float(input('Enter H: '))
-    Lw = float(input('Enter Lw (Length of one side of the domain): '))
+    #H = float(input('Enter H: '))
+    #Lw = float(input('Enter Lw (Length of one side of the domain): '))
     alpha_d = float(input('Enter angle of attack in degrees: '))
     alpha_r = np.deg2rad(alpha_d)
 

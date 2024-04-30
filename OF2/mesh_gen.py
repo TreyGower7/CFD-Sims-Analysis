@@ -153,7 +153,6 @@ def generate_vertices(n,r,H,Lf,Lw):
         j +=1;
     vertices = np.concatenate((vertices, vertices), axis=0)
     vertices[32:, 2] = -vertices[32:,2]
-    
     return vertices, R
 
 def grading(lines):

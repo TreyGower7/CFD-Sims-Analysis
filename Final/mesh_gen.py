@@ -1,7 +1,6 @@
 import numpy as np
 import re
-import matplotlib.pyplot as plt
-
+from collections import OrderedDict
 """
 Mesh generation script for cylinder 
 """
@@ -87,19 +86,12 @@ def generate_other_verts(diamond, L, H):
     vertices = np.concatenate((vertices, vertices), axis=0)
     vert_half = round(len(vertices)/2)
     vertices[vert_half:,2] = -vertices[vert_half,2]
-    print(vertices)
-    return vertices
 
 
-
-def mesh_file(formatted_vertices):
+def mesh_file(vertices):
     """ 
     saves the mesh in an openfoam readable format based on the example given
     """
-    n, L, H, alpha = params()
-    diamond = generate_diamond(alpha)
-    vertices = generate_other_verts(diamond, L, H)
-
     formatted_string = "   ("
     i = 0
     for row in vertices:
@@ -107,8 +99,13 @@ def mesh_file(formatted_vertices):
         i += 1;
     formatted_string = formatted_string[:-2]  # Remove the extra "( " at the end
 
-    contents_to_modify = {'vert_template': '  (-1.0000000000000000e+01 -5.0000000000000000e+00 -5.0000000000000003e-02) // 0',}
-
+    #Modifing a specific template and saving as a new output
+    
+    contents_to_modify = {'vert_template': '   ( 7.0710678118654735e-01 -7.0710678118654768e-01 -5.0000000000000003e-02) // 15',
+                          'edge_template': 'arc 0 1 ( 4.61940e-01  1.91342e-01 -5.00000e-02)'}
+    
+    index = 0;
+    
     with open("./blockMeshDict1.template", "r") as file:
         lines = file.readlines()
     
@@ -118,24 +115,40 @@ def mesh_file(formatted_vertices):
             lines[i] = formatted_string
             break
 
-    meshletter = input("Enter a Letter to name the mesh with: ")
+    #Adjust grading
+    yorn = None
+    while yorn != 'y' or yorn != 'n':
+        yorn = input('Would you like to change Resolution? (y/n): ')
+        if yorn == 'y':
+            lines = grading(lines)
+            break
+        if yorn == 'n':
+            break
+        else: 
+            print('enter y or n')
+    #Outer radius arc adjustment
+    '''
+    formatted_arc = arc_adjust(R)
+    for i, line in enumerate(lines):
+        if contents_to_modify['edge_template'] in line:
+            lines[i] = formatted_arc
+            break
+    '''
+    
+    meshlet = input("Enter a Letter to name the mesh with: ")
 # Write the modified lines back to the file
-    with open(f"./blockMeshDict_{meshletter}", "w") as file:
+    with open(f"./blockMeshDict_{meshlet}", "w") as file:
         file.writelines(lines)
-
     print("\n**************\n")
-    print(f"Mesh blockMeshDict_{meshletter} has been generated\n")
+    print(f"Mesh blockMeshDict_{meshlet} has been generated\n")
     print("**************\n")
 
-     # Plotting vertices
-    plt.scatter(vertices[:15, 0], vertices[:15, 1])
-    plt.xlabel('X')
-    plt.ylabel('Y')
-    plt.title('Vertices of the Diamond Shape')
-    plt.grid(True)
-    plt.show()
-
+def main():
+    """ Main entry vertices  """
+n, Lf, Lw, r, H = params()
+vertices, R = generate_vertices(n,r,H,Lf,Lw)
+mesh_file(vertices,R)
 
 if __name__ == "__main__":
     """ This is executed when run from the command line """
-    mesh_file()
+    main()

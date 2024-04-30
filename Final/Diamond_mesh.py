@@ -13,18 +13,16 @@ def params():
     """ 
     enter paramters 
     """
-    Lw = 0
+    L = 0
     H =0
-    Lf =0
+    alpha_d =0
     #we will always have 32 vertices
     n = 32
-    try:
-        H = input('Enter H: ')
-        L = input('Enter L (Length of one side of the domain): ')
-        alpha_d = input('Enter angle of attack in degrees: ')
-        alpha_r = np.deg2rad(alpha_d)
-    except:
-        print('Fault')
+
+    H = input('Enter H: ')
+    L = input('Enter L (Length of one side of the domain): ')
+    alpha_d = input('Enter angle of attack in degrees: ')
+    alpha_r = np.deg2rad(alpha_d)
 
     return n, L, H, alpha_d
 

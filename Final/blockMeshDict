@@ -100,7 +100,7 @@ boundary
       );
   }
 
-  cylinder
+  obstacle
   {
       type wall;
       faces

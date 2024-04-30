@@ -19,9 +19,9 @@ def params():
     #we will always have 32 vertices
     n = 32
 
-    H = input('Enter H: ')
-    L = input('Enter L (Length of one side of the domain): ')
-    alpha_d = input('Enter angle of attack in degrees: ')
+    H = float(input('Enter H: '))
+    L = float(input('Enter L (Length of one side of the domain): '))
+    alpha_d = float(input('Enter angle of attack in degrees: '))
     alpha_r = np.deg2rad(alpha_d)
 
     return n, L, H, alpha_d
@@ -110,7 +110,7 @@ def mesh_file():
 
     contents_to_modify = {'vert_template': '  (-1.0000000000000000e+01 -5.0000000000000000e+00 -5.0000000000000003e-02) // 0',}
 
-    with open("./blockMeshDict1.template", "r") as file:
+    with open("/Users/treygower/Desktop/blockMeshDict.template", "r") as file:
         lines = file.readlines()
     
     #inserts formatted string of vertices
@@ -121,7 +121,7 @@ def mesh_file():
 
     meshletter = input("Enter a Letter to name the mesh with: ")
 # Write the modified lines back to the file
-    with open(f"./blockMeshDict_{meshletter}", "w") as file:
+    with open(f"/Users/treygower/Desktop/blockMeshDict_{meshletter}", "w") as file:
         file.writelines(lines)
 
     print("\n**************\n")

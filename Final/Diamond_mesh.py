@@ -18,11 +18,14 @@ def params():
     Lf =0
     #we will always have 32 vertices
     n = 32
+    try:
+        H = input('Enter H: ')
+        L = input('Enter L (Length of one side of the domain): ')
+        alpha_d = input('Enter angle of attack in degrees: ')
+        alpha_r = np.deg2rad(alpha_d)
+    except:
+        print('Fault')
 
-    H = float(input('Enter H: '))
-    L = float(input('Enter L (Length of one side of the domain): ')) 
-    alpha_d = float(input('Enter angle of attack in degrees: ')) 
-    alpha_r = np.deg2rad(alpha_d)
     return n, L, H, alpha_d
 
 def generate_diamond(alpha):
@@ -92,7 +95,7 @@ def generate_other_verts(diamond, L, H):
 
 
 
-def mesh_file(formatted_vertices):
+def mesh_file():
     """ 
     saves the mesh in an openfoam readable format based on the example given
     """

@@ -114,7 +114,7 @@ def mesh_file():
         lines = file.readlines()
     
     meshletter = input("Enter a Letter to name the mesh with: ")
-    info = f'//Data for blockMeshDict_{meshletter}:\n//Alpha = {np.rad2deg(alpha)} Deg,\n//Turn Angle = 3.433 Deg,\n//Length of Fore = {Lf}m,\n//Length of Wake = {Lw}m,\n//Height = {H}m'
+    info = f'//Data for blockMeshDict_{meshletter}:\n//Alpha = {np.rad2deg(alpha)} Deg,\n//Turn Angle = 3.433 Deg,\n//Length of Fore = {Lf}m,\n//Length of Wake = {Lw}m,\n//Height = {H}m\n'
 #inserts formatted string of vertices
     for i, line in enumerate(lines):
         if contents_to_modify['vert_template'] in line:
@@ -136,10 +136,17 @@ def mesh_file():
         file.writelines(lines)
 
      # Plotting vertices
-    plt.scatter(vertices[:15, 0], vertices[:15, 1])
+    plt.scatter(vertices[12:16, 0], vertices[12:16, 1])
     plt.xlabel('X')
     plt.ylabel('Y')
     plt.title('Vertices of the Diamond Shape')
+    plt.grid(True)
+    plt.show()
+
+    plt.scatter(vertices[:16, 0], vertices[:16, 1])
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.title('Vertices of the Diamond/Grid')
     plt.grid(True)
     plt.show()
 

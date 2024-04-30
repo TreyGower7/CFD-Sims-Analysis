@@ -108,8 +108,9 @@ def mesh_file():
     formatted_string = formatted_string[:-2]  # Remove the extra "( " at the end
 
     contents_to_modify = {'vert_template': '  (-1.0000000000000000e+01 -5.0000000000000000e+00 -5.0000000000000003e-02) // 0', 'info': '// H = 5'}
-
-    with open("/Users/treygower/Desktop/blockMeshDict.template", "r") as file:
+    highres = '/Users/treygower/Desktop/blockMeshDict_highres.template'
+    lowres = '/Users/treygower/Desktop/blockMeshDict.template'
+    with open(lowres, "r") as file:
         lines = file.readlines()
     
     meshletter = input("Enter a Letter to name the mesh with: ")

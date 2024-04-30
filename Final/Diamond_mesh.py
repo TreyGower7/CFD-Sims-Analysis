@@ -14,8 +14,8 @@ def params():
     enter paramters 
     """
     Lf = 2
-    Lw = 6
-    H = 5
+    Lw = 8
+    H = 3
     alpha_d =0
     #we will always have 32 vertices
     n = 32
@@ -40,13 +40,12 @@ def generate_diamond(alpha):
 
     # Rotation matrix to account for the angle of attack
     if alpha != 0:
-        A = np.array((np.cos(alpha), np.sin(alpha)),(-np.sin(alpha), np.cos(alpha)))
-        #A = np.array((np.cos(alpha), -np.sin(alpha)), (np.sin(alpha), np.cos(alpha)))
+        A = np.array([[np.cos(alpha), np.sin(alpha)],[-np.sin(alpha), np.cos(alpha)]])
 
-        v12 = A*v12
-        v13 = A*v13
-        v14 = A*v14
-        v15 = A*v15
+        v12 = np.dot(A,v12)
+        v13 = np.dot(A,v13)
+        v14 = np.dot(A,v14)
+        v15 = np.dot(A,v15)
 
     diamond = [v12,v13,v14,v15]
     return diamond
@@ -136,7 +135,9 @@ def mesh_file():
         file.writelines(lines)
 
      # Plotting vertices
-    plt.scatter(vertices[12:16, 0], vertices[12:16, 1])
+    vis = np.append(vertices[12:16, :2], [[vertices[12, 0], vertices[12, 1]]], axis=0)
+    plt.scatter(vis[:,0], vis[:,1])
+    plt.plot(vis[:,0], vis[:,1], linestyle='-', color='red')  # Change linestyle and color as needed
     plt.xlabel('X')
     plt.ylabel('Y')
     plt.title('Vertices of the Diamond Shape')

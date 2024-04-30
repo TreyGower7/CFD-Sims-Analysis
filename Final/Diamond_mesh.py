@@ -95,62 +95,50 @@ def vertex_formatter(vertices):
     '''
     formats the vertices for the blockMeshDict file
     '''
-    formatted_vertices = []
+    formatted_string = "   ("
     for i in range(len(vertices)):
-        formatted_vertices.append(f"   ( {vertices[i,0]:.16e} {vertices[i,1]:.16e} {vertices[i,2]:.16e}) // {i}")
-    return formatted_vertices
+        formatted_string += f" {vertices[i,0]:.16e} {vertices[i,1]:.16e} {vertices[i,2]:.16e}) // {i}\n   ("
+    formatted_string = formatted_string[:-1]  # Remove the extra opening parenthesis at the end
+   
+    return formatted_string
 
 
-def get_other_verts(diamond_vertices,lines):
-    '''
-    Gets other vertices based on what vertices we dont want
-    '''
-    # Define the regular expression pattern to match vertices
-    pattern = r"\(([^)]+)\) // (\d+)"
-
-    # Find all vertices in the text
-    all_vertices = re.findall(pattern, lines)
-
-    # Convert the diamond vertices set to a set for faster lookup
-    diamond_vertices_set = set(diamond_vertices)
-
-    # Filter out the diamond vertices
-    non_diamond_vertices = [vertex for vertex in all_vertices if vertex[0] not in diamond_vertices_set]
-
-    # Display the non-diamond vertices
-    print("Non-diamond vertices:")
-    for vertex in non_diamond_vertices:
-        print(vertex)
-
-
-def mesh_file(new_vertices):
+def mesh_file(formatted_vertices):
     """ 
     saves the mesh in an openfoam readable format based on the example given
     """
  
+    contents_to_modify = {'vert_template': '  (-1.0000000000000000e+01 -5.0000000000000000e+00 -5.0000000000000003e-02) // 0',}
+
+    
     with open("./blockMeshDict.template", "r") as file:
         lines = file.readlines()
     
-    
+     #inserts formatted string of vertices
+    for i, line in enumerate(lines):
+        if contents_to_modify['vert_template'] in line:
+            lines[i] = formatted_vertices
+            break
 
-    meshlet = input("Enter a Letter to name the mesh with: ")
+    meshletter = input("Enter a Letter to name the mesh with: ")
 # Write the modified lines back to the file
-    with open(f"./blockMeshDict_{meshlet}", "w") as file:
+    with open(f"./blockMeshDict_{meshletter}", "w") as file:
         file.writelines(lines)
 
     print("\n**************\n")
-    print(f"Mesh blockMeshDict_{meshlet} has been generated\n")
+    print(f"Mesh blockMeshDict_{meshletter} has been generated\n")
     print("**************\n")
 
 def main():
     """ Main entry vertices  """
-    with open("/Users/treygower/Desktop/blockMeshDict", "r") as file:
-        lines = file.readlines()
 
     n, L, H, alpha = params()
     diamond = generate_diamond(alpha)
     vertices = generate_other_verts(diamond, L, H)
     print(vertices)
+    formatted_vertices = vertex_formatter(vertices)
+    mesh_file(formatted_vertices)
+
     # Plotting vertices
     plt.scatter(vertices[:15, 0], vertices[:15, 1])
     plt.xlabel('X')
@@ -158,8 +146,6 @@ def main():
     plt.title('Vertices of the Diamond Shape')
     plt.grid(True)
     plt.show()
-    formatted_vertices = vertex_formatter(vertices)
-    print(formatted_vertices)
     #mesh_file(vertices)
 
 if __name__ == "__main__":

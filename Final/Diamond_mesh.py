@@ -13,9 +13,9 @@ def params():
     """ 
     enter paramters 
     """
-    Lf = 2
-    Lw = 8
-    H = 3
+    Lf = 1
+    Lw = 2
+    H = 1
     alpha_d =0
     #we will always have 32 vertices
     n = 32
@@ -128,7 +128,7 @@ def mesh_file():
     contents_to_modify = {'vert_template': '  (-1.0000000000000000e+01 -5.0000000000000000e+00 -5.0000000000000003e-02) // 0', 'info': '// H = 5'}
     highres = '/Users/treygower/Desktop/blockMeshDict_highres.template'
     lowres = '/Users/treygower/Desktop/blockMeshDict.template'
-    with open(lowres, "r") as file:
+    with open(highres, "r") as file:
         lines = file.readlines()
     
     meshletter = input("Enter a Letter to name the mesh with: ")

@@ -92,6 +92,23 @@ def generate_other_verts(diamond, Lf,Lw, H):
     return vertices
 
 
+def singlegraph(diamond):
+    # Unpack diamond vertices
+    v12, v13, v14, v15 = diamond
+
+    # Extract x and y coordinates for convenience
+    x12, y12 = v12
+    x13, y13 = v13
+    x14, y14 = v14
+    x15, y15 = v15
+
+    foretop = f'foretop:\n start   ({round(x12+.0005,4)}, {round(y12+.0005,4)}, {0.0})\n end   ({round(x13+.0005,4)}, {round(y13+.0005,4)}, {0.0})'
+    forebot = f'forebot:\n start   ({round(x12-.0005,4)}, {round(y12-.0005,4)}, {0.0})\n end   ({round(x15-.0005,4)}, {round(y15-.0005,4)}, {0.0})'
+    wakebot = f'wakebot:\n start   ({round(x15-.0005,4)}, {round(y15-.0005,4)}, {0.0})\n end   ({round(x14-.0005,4)}, {round(y14-.0005,4)}, {0.0})'
+    waketop = f'waketop:\n start   ({round(x13+.0005,4)}, {round(y13+.0005,4)}, {0.0})\n end   ({round(x14+.0005,4)}, {round(y14+.0005,4)}, {0.0})'
+
+    points = [foretop, forebot, wakebot, waketop]
+    return points
 
 def mesh_file():
     """ 
@@ -99,6 +116,7 @@ def mesh_file():
     """
     n, Lf,Lw, H, alpha = params()
     diamond = generate_diamond(alpha)
+    single_graph = singlegraph(diamond)
     vertices = generate_other_verts(diamond, Lf,Lw, H)
     formatted_string = "   ("
     i = 0
@@ -151,6 +169,9 @@ def mesh_file():
     plt.title('Vertices of the Diamond/Grid')
     plt.grid(True)
     plt.show()
+
+    for i in range(len(single_graph)):
+        print(single_graph[i] + '\n')
 
 
 if __name__ == "__main__":

@@ -3,7 +3,7 @@ import re
 import matplotlib.pyplot as plt
 
 """
-Mesh generation script for cylinder 
+Mesh generation script for diamond
 """
 
 __author__ = "Trey Gower, David Valenzano, Ty Zimmerman"

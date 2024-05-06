@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 Mesh generation script for diamond
 """
 
-__author__ = "Trey Gower, David Valenzano, Ty Zimmerman"
+__author__ = "Trey Gower"
 
 
 def params():

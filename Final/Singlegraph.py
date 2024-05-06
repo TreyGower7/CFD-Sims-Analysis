@@ -1,7 +1,9 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-
+'''
+Graphs All plots of pressure vs percent of chord length seperate
+'''
 mesh = ('A0','A1','A4','A7')
 forebot1 = pd.read_csv(f'https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/Final/{mesh[0]}/postProcessing/singleGraph/1/forebot_p_T.xy', delim_whitespace=True, header=None)
 forebot2 = pd.read_csv(f'https://raw.githubusercontent.com/TreyGower7/CFD_Code/main/Final/{mesh[1]}/postProcessing/singleGraph/1/forebot_p_T.xy', delim_whitespace=True, header=None)
